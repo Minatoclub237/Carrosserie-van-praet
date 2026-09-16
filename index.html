@@ -27,19 +27,10 @@
   </script>
 </head>
 <body>
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="mark" viewBox="0 0 40 40">
-      <path d="M2 4h12l6 18 6-18h12L25 36H15z" fill="currentColor" />
-      <path d="M2 4h10l-4 11z" fill="#f0302b" />
-    </symbol>
-  </svg>
 
   <header class="nav" id="nav">
     <div class="nav__bar">
-      <a class="nav__logo" href="#top" aria-label="Carrosserie Van Praet — accueil">
-        <svg class="nav__mark"><use href="#mark" /></svg>
-        <span class="nav__word">Carrosserie<br /><span class="accent">Van Praet</span></span>
-      </a>
+<a class="nav__logo" href="#top" aria-label="Van Praet Carrosserie — accueil"><img class="nav__logo-img" src="/media/logo-nav.webp" width="900" height="307" alt="Van Praet Carrosserie" fetchpriority="high" /></a>
       <nav class="nav__links" aria-label="Navigation principale">
         <a href="#services">Services</a>
         <a href="#atelier">Atelier</a>
@@ -302,25 +293,103 @@
   </main>
 
   <footer class="footer container" id="contact">
-    <div class="footer__mark" aria-hidden="true" data-footer-mark>Carrosserie<br />Van Praet</div>
-    <div class="footer__cols">
-      <div class="footer__col footer__col--contact">
-        <p class="label">Contact</p>
-        <address>Rue François-Joseph Navez 103<br />1030 Schaerbeek, Bruxelles<br /><a href="tel:+32477777036">+32 477 77 70 36</a></address>
+    <!-- Bande d'appel à l'action -->
+    <div class="footer__cta">
+      <div class="footer__cta-text">
+        <p class="label">Carrosserie · Peinture · Mécanique</p>
+        <h2 class="footer__cta-title">Un choc, une rayure&nbsp;?<br /><span class="accent">Devis gratuit sous 24&nbsp;h.</span></h2>
       </div>
-      <div class="footer__col">
-        <p class="label">Horaires</p>
-        <ul><li>Lun – ven&nbsp;: 9:00 – 18:00</li><li>Sam&nbsp;: 9:00 – 13:30</li><li>Dim&nbsp;: fermé</li></ul>
-      </div>
-      <div class="footer__col">
-        <p class="label">Plan du site</p>
-        <ul><li><a href="#services">Services</a></li><li><a href="#atelier">Atelier</a></li><li><a href="#avis">Avis</a></li><li><a href="#faq">FAQ</a></li><li><a href="#contact">Contact</a></li></ul>
+      <div class="footer__cta-actions">
+        <a class="block-cta" href="tel:+32477777036"><span class="block-cta__arrow">↗</span><span class="block-cta__label">Appeler l’atelier</span></a>
+        <a class="outline-btn" href="#devis">Demander un devis <span>↗</span></a>
+        <a class="outline-btn" href="https://maps.app.goo.gl/2hibFTy7Ff3hPFmB8" target="_blank" rel="noopener">Itinéraire <span>↗</span></a>
       </div>
     </div>
+
+    <div class="footer__main">
+      <div class="footer__mark" aria-hidden="true" data-footer-mark>Carrosserie<br />Van Praet</div>
+      <div class="footer__cols">
+        <div class="footer__col footer__col--brand">
+          <img class="footer__logo" src="/media/logo-footer.webp" width="972" height="324" alt="Van Praet Carrosserie" loading="lazy" />
+          <p class="footer__pitch">Carrosserie, peinture en cabine et mécanique toutes marques à Schaerbeek. Devis gratuit sous 24&nbsp;h, prix fixe et garantie 2&nbsp;ans.</p>
+          <p class="label footer__langs">Accueil en français · Nederlands</p>
+        </div>
+        <div class="footer__col footer__col--wide">
+          <p class="label">Contact</p>
+          <address>
+            <a href="https://maps.app.goo.gl/2hibFTy7Ff3hPFmB8" target="_blank" rel="noopener">Rue François-Joseph Navez 103<br />1030 Schaerbeek, Bruxelles</a>
+            <a class="footer__tel" href="tel:+32477777036">+32 477 77 70 36</a>
+          </address>
+          <p class="footer__small">Paiement&nbsp;: espèces, Bancontact, carte de crédit</p>
+        </div>
+        <div class="footer__col footer__col--wide">
+          <p class="label">Horaires</p>
+          <ul class="footer__hours">
+            <li><span>Lun – ven</span><span>9:00 – 18:00</span></li>
+            <li><span>Samedi</span><span>9:00 – 13:30</span></li>
+            <li><span>Dimanche</span><span>Fermé</span></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <p class="label">Navigation</p>
+          <ul>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#atelier">L’atelier</a></li>
+            <li><a href="#etapes">Comment ça se passe</a></li>
+            <li><a href="#avis">Avis clients</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#devis">Devis gratuit</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <p class="label">Avis &amp; plateformes</p>
+          <ul class="footer__platforms">
+            <li><a href="https://maps.app.goo.gl/2hibFTy7Ff3hPFmB8" target="_blank" rel="noopener"><b>Google</b><small>Fiche et avis Google</small><i aria-hidden="true">↗</i></a></li>
+            <li><a href="https://fixico.be/fr/villes/schaerbeek/garage-van-praet" target="_blank" rel="noopener"><b>Fixico</b><small>9,5/10 · 34 avis</small><i aria-hidden="true">↗</i></a></li>
+            <li><a href="https://www.bolid.be/garages/schaerbeek/carrosserie-van-praet-schaerbeek-1030" target="_blank" rel="noopener"><b>Bolid</b><small>Fiche de l’atelier</small><i aria-hidden="true">↗</i></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <div class="footer__bottom">
-      <p>© 2026 Carrosserie Van Praet SRL · BE 0789.397.084</p>
-      <p>Paiement&nbsp;: espèces, Bancontact, carte de crédit</p>
+      <p>© 2026 Carrosserie Van Praet SRL · BCE / TVA BE&nbsp;0789.397.084 · RPM Bruxelles</p>
+      <nav class="footer__legal" aria-label="Informations légales">
+        <button type="button" data-dialog="legal">Mentions légales</button>
+        <button type="button" data-dialog="privacy">Confidentialité</button>
+        <a href="#top">Haut de page ↑</a>
+      </nav>
     </div>
+
+    <!-- Mentions légales -->
+    <dialog class="legal" id="legal" aria-labelledby="legal-title">
+      <button type="button" class="legal__close" data-close aria-label="Fermer">×</button>
+      <h3 id="legal-title">Mentions légales</h3>
+      <h4>Éditeur du site</h4>
+      <p>Carrosserie Van Praet SRL (société à responsabilité limitée)<br />Siège&nbsp;: Rue François-Joseph Navez 103, 1030 Schaerbeek, Belgique<br />Numéro d’entreprise (BCE) et TVA&nbsp;: BE&nbsp;0789.397.084 — RPM Bruxelles<br />Téléphone&nbsp;: <a href="tel:+32477777036">+32 477 77 70 36</a><br />E-mail&nbsp;: [adresse e-mail à compléter]</p>
+      <h4>Hébergement</h4>
+      <p>[Nom, adresse et contact de l’hébergeur à compléter lors de la mise en ligne.]</p>
+      <h4>Propriété intellectuelle</h4>
+      <p>Les textes, le logo et les visuels de ce site appartiennent à Carrosserie Van Praet SRL, sauf mention contraire. Toute reproduction sans autorisation écrite est interdite. Les logos des constructeurs automobiles restent la propriété de leurs détenteurs respectifs&nbsp;; ils indiquent uniquement les marques prises en charge par l’atelier.</p>
+      <h4>Avis clients</h4>
+      <p>Les avis présentés sont reformulés à partir des évaluations publiées sur Fixico. La note de 9,5/10 sur 34 avis correspond à la page Fixico de l’atelier consultée le 16 septembre 2026.</p>
+      <h4>Liens externes</h4>
+      <p>Le site renvoie vers Google Maps, Fixico et Bolid. Carrosserie Van Praet SRL n’est pas responsable du contenu ni des pratiques de ces sites tiers.</p>
+    </dialog>
+
+    <!-- Confidentialité -->
+    <dialog class="legal" id="privacy" aria-labelledby="privacy-title">
+      <button type="button" class="legal__close" data-close aria-label="Fermer">×</button>
+      <h3 id="privacy-title">Confidentialité</h3>
+      <h4>Aucun suivi sur ce site</h4>
+      <p>Ce site ne dépose aucun cookie publicitaire ni de mesure d’audience et ne comporte pas de formulaire. Les polices sont hébergées sur le site lui-même, sans appel à un service tiers.</p>
+      <h4>Données transmises à l’atelier</h4>
+      <p>Lorsque vous appelez l’atelier ou lui envoyez des photos, les informations communiquées (nom, coordonnées, véhicule, photos des dégâts) servent uniquement à établir votre devis et à réaliser la réparation. Elles sont traitées sur la base de mesures précontractuelles et du contrat (article 6.1.b du RGPD) et conservées le temps nécessaire, puis selon les obligations comptables légales.</p>
+      <h4>Vos droits</h4>
+      <p>Vous pouvez demander l’accès, la rectification ou l’effacement de vos données en contactant l’atelier au <a href="tel:+32477777036">+32 477 77 70 36</a>. Vous pouvez aussi introduire une réclamation auprès de l’Autorité de protection des données, rue de la Presse 35, 1000 Bruxelles — <a href="https://www.autoriteprotectiondonnees.be" target="_blank" rel="noopener">autoriteprotectiondonnees.be</a>.</p>
+      <h4>Sites tiers</h4>
+      <p>Les liens vers Google Maps, Fixico et Bolid vous font quitter ce site&nbsp;: leurs propres politiques de confidentialité s’appliquent.</p>
+    </dialog>
   </footer>
 
   <script type="module" src="/src/main.js"></script>

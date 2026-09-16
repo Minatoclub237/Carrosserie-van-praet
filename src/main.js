@@ -42,6 +42,19 @@ lenis ? lenis.on('scroll', ({ scroll }) => setNav(scroll)) : window.addEventList
 /* ---------- Bande des marques ---------- */
 renderBrands(document.querySelector('.brands__track'))
 
+/* ---------- Fenêtres légales (dialog natif) ---------- */
+document.querySelectorAll('[data-dialog]').forEach((btn) => {
+  const dlg = document.getElementById(btn.dataset.dialog)
+  btn.addEventListener('click', () => { dlg.showModal(); lenis?.stop() })
+  dlg.addEventListener('close', () => lenis?.start())
+  dlg.addEventListener('click', (e) => {
+    if (e.target.closest('[data-close]')) return dlg.close()
+    // Clic sur le fond assombri (hors du cadre de la fenêtre) : fermeture
+    const r = dlg.getBoundingClientRect()
+    if (e.target === dlg && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)) dlg.close()
+  })
+})
+
 /* ---------- FAQ ---------- */
 initFaq(document.getElementById('faq'), { reduced })
 
