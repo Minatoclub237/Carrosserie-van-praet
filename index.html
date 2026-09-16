@@ -107,17 +107,17 @@
               <circle cx="24" cy="24" r="3" />
             </svg>
             <h3 class="cap-card__title" data-scroll-text>Polissage &amp; jantes</h3>
-            <p class="cap-card__text">Rayures, lustrage professionnel, smart repair et réparation de jantes.</p>
+            <p class="cap-card__text">Rayures, lustrage, smart repair, jantes et rénovation des phares jaunis.</p>
           </article>
           <article class="cap-card">
             <svg class="cap-card__icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1">
               <g class="spin"><path d="M8 16l12-8h20v24l-12 8H8z" /><path d="M8 16h20v24M28 16l12-8" /><path d="M14.7 16v24M21.3 16v24M8 24h20M8 32h20M14.7 16l12-8M21.3 16l12-8M28 24l12-8M28 32l12-8M32 13.3v24M36 10.7v24" stroke-width=".6" /></g>
             </svg>
             <h3 class="cap-card__title" data-scroll-text>Mécanique toutes marques</h3>
-            <p class="cap-card__text">Entretien, freins, embrayage, distribution, climatisation et échappement.</p>
+            <p class="cap-card__text">Vidange, freins, embrayage, distribution, batterie, FAP et vanne EGR.</p>
           </article>
         </div>
-        <a class="outline-btn" href="#atelier">Découvrir l'atelier <span>↗</span></a>
+        <div class="capabilities__actions"><a class="outline-btn" href="#prestations">Voir les 51 prestations <span>↗</span></a><a class="outline-btn" href="#atelier">Découvrir l'atelier <span>↗</span></a></div>
       </div>
       <div class="cross-row"><i class="cross"></i><i class="cross"></i></div>
     </section>
@@ -197,6 +197,28 @@
           <article class="ind-card"><span class="ind-card__num">02</span><canvas class="ind-card__art" data-model="gun"></canvas><h3 class="ind-card__title" data-scroll-text>Peinture</h3><p class="ind-card__text">Cabine de peinture intégrée à l'atelier.</p></article>
           <article class="ind-card"><span class="ind-card__num">03</span><canvas class="ind-card__art" data-model="wheel"></canvas><h3 class="ind-card__title" data-scroll-text>Jantes &amp; polissage</h3><p class="ind-card__text">Réparation de jantes, lustrage et smart repair.</p></article>
           <article class="ind-card"><span class="ind-card__num">04</span><canvas class="ind-card__art" data-model="brake"></canvas><h3 class="ind-card__title" data-scroll-text>Mécanique</h3><p class="ind-card__text">Entretien et réparations, toutes marques.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATALOGUE COMPLET DES PRESTATIONS -->
+    <section class="presta" id="prestations">
+      <div class="presta__inner container">
+        <header class="presta__head">
+          <div>
+            <p class="label" data-scroll-text>Catalogue de l’atelier</p>
+            <h2 class="presta__title" data-flip>Toutes nos<br /><span class="accent">prestations</span></h2>
+          </div>
+          <div class="presta__stat">
+            <span class="presta__num" data-presta-count data-to="0">0</span>
+            <p class="presta__stat-label"><span>prestations</span><span><b data-presta-domains>13</b> domaines · toutes marques</span></p>
+          </div>
+        </header>
+        <div class="presta__chips-rail"><div class="presta__chips" role="navigation" aria-label="Domaines de prestations"></div></div>
+        <div class="presta__grid"></div>
+        <div class="presta__foot">
+          <p>Votre intervention n’apparaît pas dans la liste&nbsp;? L’atelier vous dit tout de suite s’il peut s’en charger.</p>
+          <a class="faq-cta" href="tel:+32477777036">Appeler l’atelier <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </div>
     </section>
@@ -334,6 +356,7 @@
           <p class="label">Navigation</p>
           <ul>
             <li><a href="#services">Services</a></li>
+            <li><a href="#prestations">Toutes les prestations</a></li>
             <li><a href="#atelier">L’atelier</a></li>
             <li><a href="#etapes">Comment ça se passe</a></li>
             <li><a href="#avis">Avis clients</a></li>

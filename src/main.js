@@ -7,6 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { renderBrands } from './brands.js'
 import { initFaq } from './faq.js'
+import { renderPrestations } from './prestations.js'
 
 gsap.registerPlugin(ScrollTrigger)
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -53,6 +54,18 @@ document.querySelectorAll('[data-dialog]').forEach((btn) => {
     const r = dlg.getBoundingClientRect()
     if (e.target === dlg && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)) dlg.close()
   })
+})
+
+/* ---------- Catalogue des prestations ---------- */
+const presta = renderPrestations(document.getElementById('prestations'))
+presta.chips.addEventListener('click', (e) => {
+  const chip = e.target.closest('.presta__chip')
+  if (!chip) return
+  const card = document.getElementById(chip.dataset.target)
+  presta.chips.querySelectorAll('.presta__chip').forEach((c) => c.classList.toggle('is-on', c === chip))
+  lenis ? lenis.scrollTo(card, { offset: -110, duration: 1.2 }) : card.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  card.classList.remove('is-flash'); void card.offsetWidth; card.classList.add('is-flash')
+  setTimeout(() => card.classList.remove('is-flash'), 1800)
 })
 
 /* ---------- FAQ ---------- */
@@ -230,6 +243,25 @@ if (!reduced) {
       gsap.set(r.row, { x: r.x })
       skewTo[i](gsap.utils.clamp(-12, 12, -v * 0.35 * r.dir))
     })
+  })
+
+  /* ================= CATALOGUE ================= */
+  const prestaNum = document.querySelector('[data-presta-count]')
+  const prestaObj = { v: 0 }
+  gsap.to(prestaObj, {
+    v: () => +prestaNum.dataset.to, ease: 'power2.out',
+    onUpdate: () => { prestaNum.textContent = Math.round(prestaObj.v) },
+    scrollTrigger: { trigger: '.presta', start: 'top 85%', end: 'top 25%', scrub },
+  })
+  gsap.fromTo('.presta__chip', { y: 24, opacity: 0 }, {
+    y: 0, opacity: 1, ease: 'power2.out', stagger: 0.03,
+    scrollTrigger: { trigger: '.presta__chips', start: 'top 95%', end: 'top 70%', scrub },
+  })
+  // Cartes : chacune se découvre de bas en haut à son arrivée, ses lignes suivent en cascade (réversible)
+  presta.cards.forEach((card) => {
+    const st = { trigger: card, start: 'top 96%', end: 'top 62%', scrub }
+    gsap.fromTo(card, { clipPath: 'inset(100% 0% 0% 0% round 14px)', y: 60 }, { clipPath: 'inset(0% 0% 0% 0% round 14px)', y: 0, ease: 'power2.out', scrollTrigger: st })
+    gsap.fromTo(card.querySelectorAll('li'), { opacity: 0, x: -18 }, { opacity: 1, x: 0, ease: 'power2.out', stagger: 0.06, scrollTrigger: st })
   })
 
   /* ================= ÉTAPES ================= */
