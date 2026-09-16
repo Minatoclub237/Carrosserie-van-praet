@@ -250,9 +250,21 @@ if (!reduced) {
   const imgs = gsap.utils.toArray('.panels__img')
   gsap.utils.toArray('.panel-card').forEach((card, i) => {
     if (i === 0) return
-    gsap.fromTo(imgs[i], { opacity: 0, scale: 1.08 }, {
-      opacity: 1, scale: 1, ease: 'none',
+    gsap.fromTo(imgs[i], { opacity: 0 }, {
+      opacity: 1, ease: 'none',
       scrollTrigger: { trigger: card, start: 'top 80%', end: 'top 38%', scrub: true },
+    })
+  })
+  // Chaque photo zoome lentement pendant qu'elle est à l'écran (effet Ken Burns lié au défilement)
+  imgs.forEach((fig, i) => {
+    const cards = gsap.utils.toArray('.panel-card')
+    gsap.fromTo(fig.querySelector('img'), { scale: 1.14, xPercent: 2 }, {
+      scale: 1, xPercent: 0, ease: 'none',
+      scrollTrigger: { trigger: cards[i], start: 'top 90%', endTrigger: cards[i + 1] || '.panels__hold', end: 'top 20%', scrub: true },
+    })
+    gsap.fromTo(fig.querySelector('.panels__cap'), { y: 30, opacity: 0 }, {
+      y: 0, opacity: 1, ease: 'power2.out',
+      scrollTrigger: { trigger: cards[i], start: 'top 60%', end: 'top 35%', scrub: true },
     })
   })
 

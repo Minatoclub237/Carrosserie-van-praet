@@ -232,7 +232,17 @@ img, video, canvas, svg { display: block; }
 /* Le calque déborde de 100vh : la dernière photo reste figée pendant que « clientèles » la recouvre */
 .panels__layer { position: absolute; inset: 0 0 -100vh; }
 .panels__media { position: sticky; top: 0; height: 100vh; overflow: hidden; }
-.panels__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; will-change: opacity, transform; }
+.panels__media { background: var(--bg); }
+/* Photo sur les 70 % de droite : la carte blanche ne masque plus le sujet */
+.panels__img { position: absolute; top: 0; right: 0; bottom: 0; left: 30vw; margin: 0; overflow: hidden; opacity: 0; will-change: opacity; }
+.panels__img img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; will-change: transform; }
+/* Fondu vers le fond sombre sous la colonne de cartes */
+.panels__img::before { content: ''; position: absolute; inset: 0 auto 0 0; z-index: 1; width: 42%; background: linear-gradient(90deg, var(--bg) 0%, rgba(24,24,21,.75) 35%, rgba(24,24,21,0) 100%); pointer-events: none; }
+.panels__img::after { content: ''; position: absolute; inset: auto 0 0 0; z-index: 1; height: 30%; background: linear-gradient(0deg, rgba(0,0,0,.55), rgba(0,0,0,0)); pointer-events: none; }
+.panels__cap { position: absolute; right: var(--pad); bottom: 3vw; z-index: 2; display: inline-flex; align-items: center; gap: 12px; padding: 10px 16px 10px 10px;
+  border: 1px solid rgba(255,255,255,.2); border-radius: 999px; background: rgba(10,10,10,.45); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  color: #fff; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+.panels__cap span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--blue); font-size: 11px; }
 .panels__img.is-first { opacity: 1; }
 .panels__col { position: relative; padding-top: 6vw; }
 .panel-card {
@@ -588,7 +598,10 @@ img, video, canvas, svg { display: block; }
   .cap-card__icon { top: 14px; left: 14px; width: 40px; height: 40px; }
   .cap-card__title, .ind-card__title { font-size: 17px; }
   .outline-btn { margin-top: 20px; }
-  .panel-card { width: 100%; min-height: 72vh; padding: 56px 20px 24px; top: 72px; margin-bottom: 12px; }
+  .panel-card { width: 100%; min-height: 0; padding: 56px 20px 24px; top: 72px; margin-bottom: 38vh; }
+  .panels__img { left: 0; }
+  .panels__img::before { display: none; }
+  .panels__cap { display: none; }
   .panel-card__num { top: 20px; right: 20px; }
   .panel-card__title { font-size: 6.6vw; margin-bottom: 14px; }
   .panel-card__text { max-width: none; }
