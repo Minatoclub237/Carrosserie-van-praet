@@ -34,10 +34,10 @@ document.addEventListener('click', (e) => {
   lenis ? lenis.scrollTo(el, { offset: id === '#top' ? 0 : -70, duration: 1.4 }) : window.scrollTo(0, el ? el.offsetTop - 70 : 0)
 })
 
-/* ---------- Vidéo hero : source selon la largeur ---------- */
+/* ---------- Vidéo hero : lecture en boucle (relance si le navigateur la met en pause) ---------- */
 const video = document.querySelector('.hero__video')
-video.src = window.matchMedia('(max-width: 767px)').matches ? video.dataset.srcMobile : video.dataset.srcDesktop
 video.play().catch(() => {})
+document.addEventListener('visibilitychange', () => { if (!document.hidden) video.play().catch(() => {}) })
 
 /* ---------- Nav : largeur pleine au repos, recadrée sur la grille dès qu'on défile ---------- */
 const nav = document.getElementById('nav')
@@ -141,24 +141,28 @@ if (!reduced) {
 
   /* ================= HERO ================= */
   const heroChars = gsap.utils.toArray('.hero__title [data-chars]').flatMap(splitChars)
+  // Arrivée : titre ligne par ligne, puis informations, actions et badges d'avis
   gsap.fromTo('.hero__title .mask__line', { yPercent: 115 }, { yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: 0.09, delay: 0.15 })
   gsap.fromTo('.hero__sub .mask__line', { yPercent: 115 }, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.09, delay: 0.5 })
-  gsap.fromTo('.hero__meta .label', { opacity: 0, y: 12 }, { opacity: 0.8, y: 0, duration: 1, delay: 0.7, stagger: 0.1 })
+  gsap.fromTo(['.hero__eyebrow', '.hero__actions'], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.7 })
+  gsap.fromTo('.hero-badge', { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.9 })
 
-  // Recouvert par « savoir-faire » (hero à ~50 % de la vitesse, mesuré sur la vidéo)
-  const heroST = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
-  gsap.to('.hero', { yPercent: 48, ease: 'none', scrollTrigger: heroST })
-  gsap.to('.hero__shade', { backgroundColor: 'rgba(0,0,0,.55)', ease: 'none', scrollTrigger: heroST })
-  // Les lettres du titre se dispersent en s'envolant à des vitesses différentes
-  gsap.to(heroChars, {
-    y: () => -gsap.utils.random(60, 320),
-    rotate: () => gsap.utils.random(-18, 18),
-    opacity: 0,
-    ease: 'power1.in',
-    stagger: { each: 0.012, from: 'random' },
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: '55% top', scrub },
+  // Séquence au défilement : le titre se disperse, les chiffres montent et comptent
+  const nums = gsap.utils.toArray('.hero-num')
+  gsap.set(nums, { opacity: 0, y: 70 })
+  const htl = gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom bottom', scrub: 0.8 } })
+  htl.to('.hero__scroll', { opacity: 0, duration: 0.1 }, 0)
+    .to(heroChars, { y: () => -gsap.utils.random(80, 340), rotate: () => gsap.utils.random(-18, 18), opacity: 0, ease: 'power1.in', stagger: { each: 0.004, from: 'random' }, duration: 0.45 }, 0.05)
+    .to(['.hero__eyebrow', '.hero__sub', '.hero__actions'], { opacity: 0, y: -50, ease: 'power1.in', duration: 0.3 }, 0.05)
+    .to(nums, { opacity: 1, y: 0, ease: 'power3.out', stagger: 0.08, duration: 0.4 }, 0.45)
+  nums.forEach((n, i) => {
+    const b = n.querySelector('b'), to = +b.dataset.count, o = { v: 0 }
+    htl.to(o, { v: to, ease: 'power2.out', duration: 0.45, onUpdate: () => { b.textContent = Math.round(o.v) } }, 0.5 + i * 0.08)
   })
-  gsap.to(['.hero__sub', '.hero__cta', '.hero__meta'], { opacity: 0, y: -40, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: '35% top', scrub } })
+  htl.to({}, { duration: 0.15 })
+
+  // Fin de séquence : la scène est recouverte par « savoir-faire » (hero à ~50 % de la vitesse)
+  gsap.to('.hero__stage', { yPercent: 48, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'bottom bottom', end: 'bottom top', scrub: true } })
 
   /* ================= TEXTES ================= */
   // Mots qui montent (réversible)

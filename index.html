@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Carrosserie Van Praet — Carrosserie, peinture et mécanique à Schaerbeek</title>
   <meta name="description" content="Carrosserie Van Praet, rue François-Joseph Navez 103 à Schaerbeek : carrosserie, peinture en cabine, polissage et mécanique toutes marques. Devis gratuit sous 24 h, prix fixe, garantie 2 ans." />
-  <link rel="preload" as="image" href="/media/hero-poster.webp" />
+  <link rel="preload" as="image" href="/media/hero-car-poster.webp" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -51,27 +51,68 @@
   </header>
 
   <main id="top">
-    <!-- HERO -->
+    <!-- HERO : séquence au défilement (scène sticky) -->
     <section class="hero" id="hero">
-      <div class="hero__media">
-        <video class="hero__video" autoplay muted loop playsinline preload="auto" poster="/media/hero-poster.webp"
-          data-src-desktop="/media/hero.mp4" data-src-mobile="/media/hero-mobile.mp4"></video>
-        <div class="hero__shade"></div>
-      </div>
-      <div class="hero__meta container">
-        <span class="label">Schaerbeek — Bruxelles</span>
-        <span class="label">FR · NL</span>
-      </div>
-      <div class="hero__content container">
-        <div class="hero__text">
-          <h1 class="hero__title">
-            <span class="mask"><span class="mask__line" data-chars>Carrosserie,</span></span>
-            <span class="mask"><span class="mask__line" data-chars>peinture et</span></span>
-            <span class="mask"><span class="mask__line" data-chars><span class="accent">mécanique</span></span></span>
-          </h1>
-          <p class="hero__sub"><span class="mask"><span class="mask__line">Toutes marques, rue Navez à Schaerbeek.</span></span><span class="mask"><span class="mask__line">Devis gratuit sous 24 h.</span></span></p>
+      <div class="hero__stage">
+        <div class="hero__media">
+          <video class="hero__video" autoplay muted loop playsinline preload="auto" poster="/media/hero-car-poster.webp" src="/media/hero-car.mp4"></video>
         </div>
-        <a class="block-cta hero__cta" href="#devis"><span class="block-cta__arrow">↗</span><span class="block-cta__label">Devis gratuit</span></a>
+
+        <div class="hero__content container">
+          <!-- Temps 1 : titre + informations majeures -->
+          <div class="hero__text">
+            <p class="label hero__eyebrow">Carrosserie Van Praet · Schaerbeek, Bruxelles</p>
+            <h1 class="hero__title">
+              <span class="mask"><span class="mask__line" data-chars>Carrosserie,</span></span>
+              <span class="mask"><span class="mask__line" data-chars>peinture &amp;</span></span>
+              <span class="mask"><span class="mask__line" data-chars><span class="accent">mécanique</span></span></span>
+            </h1>
+            <p class="hero__sub"><span class="mask"><span class="mask__line">Toutes marques, rue François-Joseph Navez 103.</span></span><span class="mask"><span class="mask__line">Devis gratuit sous 24&nbsp;h, garantie 2&nbsp;ans.</span></span></p>
+            <div class="hero__actions">
+              <a class="block-cta hero__cta" href="#devis"><span class="block-cta__arrow">↗</span><span class="block-cta__label">Devis gratuit 24 h</span></a>
+              <a class="hero__call" href="tel:+32477777036">0477 77 70 36</a>
+            </div>
+          </div>
+
+          <!-- Liens vers les avis -->
+          <div class="hero__reviews">
+            <a class="hero-badge" href="https://share.google/LqZYZ5JYPHfEs9HVP" target="_blank" rel="noopener">
+              <span class="hero-badge__src">Google</span>
+              <span class="hero-badge__score">3,9</span>
+              <span class="hero-badge__stars" aria-label="3,9 sur 5"><span class="hero-badge__stars-bg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 17.3-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 17.3-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 17.3-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 17.3-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 17.3-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg></span><span class="hero-badge__stars-fill" style="width:78%"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 17.3-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 17.3-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 17.3-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 17.3-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 17.3-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg></span></span>
+              <span class="hero-badge__count">28 avis <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </a>
+            <a class="hero-badge" href="https://fixico.be/fr/villes/schaerbeek/garage-van-praet" target="_blank" rel="noopener">
+              <span class="hero-badge__src">Fixico</span>
+              <span class="hero-badge__score">9,5<small>/10</small></span>
+              <span class="hero-badge__bar"><i style="width:95%"></i></span>
+              <span class="hero-badge__count">34 avis <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </a>
+          </div>
+
+          <!-- Temps 2 : les chiffres montent pendant le défilement -->
+          <div class="hero__numbers" aria-label="L’atelier en chiffres">
+            <div class="hero-num"><span class="hero-num__value"><b data-count="24">0</b>&nbsp;h</span><span class="hero-num__label">pour recevoir votre devis gratuit</span></div>
+            <div class="hero-num"><span class="hero-num__value"><b data-count="2">0</b>&nbsp;ans</span><span class="hero-num__label">de garantie sur les réparations</span></div>
+            <div class="hero-num"><span class="hero-num__value"><b data-count="40">0</b>+</span><span class="hero-num__label">marques prises en charge</span></div>
+            <div class="hero-num"><span class="hero-num__value"><b data-count="51">0</b></span><span class="hero-num__label">prestations carrosserie &amp; mécanique</span></div>
+          </div>
+        </div>
+
+        <span class="hero__scroll label" aria-hidden="true">Faites défiler</span>
+
+        <!-- Texte défilant : informations majeures en boucle -->
+        <div class="hero__ticker" aria-label="Informations pratiques">
+          <div class="hero__ticker-track">
+            <span>Rue François-Joseph Navez 103, 1030 Schaerbeek</span><i>✦</i>
+            <span>Lun – ven 9:00 – 18:00 · Sam 9:00 – 14:00</span><i>✦</i>
+            <span>Devis gratuit sous 24 h</span><i>✦</i>
+            <span>Prix annoncé = prix payé</span><i>✦</i>
+            <span>Garantie 2 ans</span><i>✦</i>
+            <span>Accueil FR · NL</span><i>✦</i>
+            <span>0477 77 70 36</span><i>✦</i>
+          </div>
+        </div>
       </div>
     </section>
 
