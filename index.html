@@ -201,24 +201,26 @@
       </div>
     </section>
 
-    <!-- CATALOGUE COMPLET DES PRESTATIONS -->
+    <!-- CATALOGUE : carrousel 3D piloté par le défilement -->
     <section class="presta" id="prestations">
-      <div class="presta__inner container">
-        <header class="presta__head">
-          <div>
-            <p class="label" data-scroll-text>Catalogue de l’atelier</p>
-            <h2 class="presta__title" data-flip>Toutes nos<br /><span class="accent">prestations</span></h2>
+      <div class="presta__stage">
+        <div class="presta__scene">
+          <div class="presta__deck"></div>
+        </div>
+        <div class="presta__info container">
+          <p class="label" data-scroll-text>Catalogue de l’atelier</p>
+          <h2 class="presta__title" data-flip>Toutes nos<br /><span class="accent">prestations</span></h2>
+          <p class="presta__stat"><span class="presta__num" data-presta-count data-to="0">0</span> prestations · <b data-presta-domains>13</b> domaines · toutes marques</p>
+          <div class="presta__active" aria-live="polite">
+            <p class="presta__index"><span class="presta__current">01</span><span class="presta__total"> / 13</span></p>
+            <p class="presta__name">Carrosserie</p>
+            <p class="presta__active-count">4 prestations</p>
           </div>
-          <div class="presta__stat">
-            <span class="presta__num" data-presta-count data-to="0">0</span>
-            <p class="presta__stat-label"><span>prestations</span><span><b data-presta-domains>13</b> domaines · toutes marques</span></p>
-          </div>
-        </header>
-        <div class="presta__chips-rail"><div class="presta__chips" role="navigation" aria-label="Domaines de prestations"></div></div>
-        <div class="presta__grid"></div>
-        <div class="presta__foot">
-          <p>Votre intervention n’apparaît pas dans la liste&nbsp;? L’atelier vous dit tout de suite s’il peut s’en charger.</p>
-          <a class="faq-cta" href="tel:+32477777036">Appeler l’atelier <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="faq-cta presta__call" href="tel:+32477777036">Une intervention absente&nbsp;? Appelez l’atelier <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div class="presta__rail container">
+          <span class="presta__hint label">Faites défiler</span>
+          <div class="presta__track"><i class="presta__fill"></i><div class="presta__ticks"></div></div>
         </div>
       </div>
     </section>
