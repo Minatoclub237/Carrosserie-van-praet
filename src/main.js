@@ -37,6 +37,33 @@ const setNav = (y) => nav.classList.toggle('is-scrolled', y > 8)
 setNav(window.scrollY)
 lenis ? lenis.on('scroll', ({ scroll }) => setNav(scroll)) : window.addEventListener('scroll', () => setNav(window.scrollY), { passive: true })
 
+/* ---------- Découpe en mots masqués (conserve <br> et espaces insécables) ---------- */
+function splitWords(el) {
+  const inners = []
+  const walk = (node) => {
+    ;[...node.childNodes].forEach((child) => {
+      if (child.nodeType === 1) return walk(child)
+      if (child.nodeType !== 3 || !child.textContent.trim()) return
+      const frag = document.createDocumentFragment()
+      child.textContent.split(/( +)/).forEach((part) => {
+        if (!part) return
+        if (/^ +$/.test(part)) return frag.append(' ')
+        const w = document.createElement('span')
+        w.className = 'w'
+        const i = document.createElement('span')
+        i.className = 'w__i'
+        i.textContent = part
+        w.append(i)
+        frag.append(w)
+        inners.push(i)
+      })
+      child.replaceWith(frag)
+    })
+  }
+  walk(el)
+  return inners
+}
+
 /* ---------- Révélations de lignes masquées ---------- */
 const lineReveal = (lines, opts = {}) =>
   gsap.fromTo(lines, { yPercent: 115 }, { yPercent: 0, duration: 1.05, ease: 'power4.out', stagger: 0.09, ...opts })
@@ -46,18 +73,29 @@ if (!reduced) {
   lineReveal('.hero__title .mask__line', { delay: 0.15 })
   lineReveal('.hero__sub .mask__line', { delay: 0.5, duration: 0.9 })
 
-  // « Besoin d'un devis ? » : se révèle quand le bloc arrive dans l'écran
-  gsap.set('.quote .mask__line', { yPercent: 115 })
-  ScrollTrigger.create({
-    trigger: '.quote__text',
-    start: 'top 92%',
-    once: true,
-    onEnter: () => lineReveal('.quote .mask__line', { stagger: 0.12 }),
+  /* ---------- Textes liés au défilement : les mots montent en descendant,
+     redescendent en remontant (scrub, donc réversible) ---------- */
+  gsap.utils.toArray('[data-scroll-text]').forEach((el) => {
+    const words = splitWords(el)
+    const long = el.dataset.scrollText === 'long'
+    gsap.fromTo(words, { yPercent: 118 }, {
+      yPercent: 0,
+      ease: 'power2.out',
+      stagger: long ? 0.035 : 0.08,
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 94%',
+        end: long ? 'bottom 62%' : 'top 58%',
+        scrub: 0.6,
+      },
+    })
   })
 
-  /* ---------- Hero : parallaxe de la vidéo + assombrissement ---------- */
-  gsap.to('.hero__media', {
-    yPercent: 16,
+  /* ---------- Hero : recouvert par la section suivante ----------
+     Mesuré sur la vidéo : le hero défile à ~50 % de la vitesse pendant que
+     « savoir-faire » (fond opaque, au-dessus) glisse par-dessus. */
+  gsap.to('.hero', {
+    yPercent: 48,
     ease: 'none',
     scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
   })
