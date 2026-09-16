@@ -8,6 +8,7 @@ import Lenis from 'lenis'
 import { renderBrands } from './brands.js'
 import { initFaq } from './faq.js'
 import { initPrestations } from './prestations.js'
+import { initGoogleReviews } from './google-reviews.js'
 
 gsap.registerPlugin(ScrollTrigger)
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -62,6 +63,9 @@ document.querySelectorAll('[data-dialog]').forEach((btn) => {
 
 /* ---------- Catalogue : carrousel 3D ---------- */
 const presta = initPrestations(document.getElementById('prestations'), { lenis, reduced })
+
+/* ---------- Avis Google en boucle ---------- */
+initGoogleReviews(document.getElementById('avis-google'), { lenis, reduced })
 
 /* ---------- FAQ ---------- */
 initFaq(document.getElementById('faq'), { reduced })
@@ -247,6 +251,17 @@ if (!reduced) {
     v: () => +prestaNum.dataset.to, ease: 'power2.out',
     onUpdate: () => { prestaNum.textContent = Math.round(prestaObj.v) },
     scrollTrigger: { trigger: '.presta', start: 'top 85%', end: 'top 15%', scrub },
+  })
+
+  /* ================= AVIS GOOGLE ================= */
+  // La bande s'ouvre de haut en bas à son arrivée, les flèches suivent (réversible)
+  gsap.fromTo('.greviews__strip', { clipPath: 'inset(0% 0% 100% 0% round 16px)', y: 70 }, {
+    clipPath: 'inset(0% 0% 0% 0% round 16px)', y: 0, ease: 'power2.out',
+    scrollTrigger: { trigger: '.greviews__strip', start: 'top 95%', end: 'top 55%', scrub },
+  })
+  gsap.fromTo('.greviews__arrow', { y: 30, opacity: 0 }, {
+    y: 0, opacity: 1, stagger: 0.1, ease: 'power2.out',
+    scrollTrigger: { trigger: '.greviews__nav', start: 'top 100%', end: 'top 80%', scrub },
   })
 
   /* ================= ÉTAPES ================= */
