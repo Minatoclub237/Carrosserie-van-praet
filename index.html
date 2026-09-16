@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>html:not(.is-ready) body{opacity:0}html.is-ready body{opacity:1;transition:opacity .45s ease}body{background:#181815}html{background:#181815}</style>
+  <noscript><style>html body{opacity:1}</style></noscript>
+  <script>setTimeout(function(){document.documentElement.classList.add("is-ready")},3000)</script>
   <title>Carrosserie Van Praet — Carrosserie, peinture et mécanique à Schaerbeek</title>
   <meta name="description" content="Carrosserie Van Praet, rue François-Joseph Navez 103 à Schaerbeek : carrosserie, peinture en cabine, polissage et mécanique toutes marques. Devis gratuit sous 24 h, prix fixe, garantie 2 ans." />
   <link rel="preload" as="image" href="/media/hero-car-poster.webp" />
@@ -19,6 +22,7 @@
     "legalName": "Carrosserie Van Praet SRL",
     "vatID": "BE0789397084",
     "telephone": "+32477777036",
+    "email": "carrosserievanpraet@gmail.com",
     "address": { "@type": "PostalAddress", "streetAddress": "Rue François-Joseph Navez 103", "postalCode": "1030", "addressLocality": "Schaerbeek", "addressRegion": "Bruxelles-Capitale", "addressCountry": "BE" },
     "geo": { "@type": "GeoCoordinates", "latitude": 50.8725256, "longitude": 4.3733313 },
     "openingHoursSpecification": [
@@ -387,14 +391,95 @@
       </div>
     </section>
 
-    <!-- DEVIS -->
+    <!-- DEVIS : formulaire -->
     <section class="quote container" id="devis">
       <div class="quote__box">
         <div class="quote__text">
+          <p class="label quote__label">Demande de devis</p>
           <h2 class="quote__title" data-zoom-title>Un devis en <span class="accent">24&nbsp;h</span>&nbsp;?</h2>
           <p class="quote__sub" data-scroll-text>Envoyez vos photos, on s'occupe du reste. Gratuit et sans engagement.</p>
+          <ul class="quote__perks">
+            <li><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Prise de rendez-vous facile</li>
+            <li><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Garantie de prix fixe</li>
+            <li><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Toujours 2 ans de garantie</li>
+            <li><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Estimation gratuite et sans engagement</li>
+          </ul>
+          <p class="quote__alt">Vous préférez nous écrire directement&nbsp;?<br /><a href="mailto:carrosserievanpraet@gmail.com">carrosserievanpraet@gmail.com</a> · <a href="tel:+32477777036">0477 77 70 36</a></p>
         </div>
-        <a class="block-cta quote__cta" href="tel:+32477777036"><span class="block-cta__arrow">↗</span><span class="block-cta__label">0477 77 70 36</span></a>
+
+        <form class="qf" id="quote-form" novalidate>
+          <div class="qf__head">
+            <p class="qf__title">Saisissez ici les données de votre voiture</p>
+          </div>
+          <div class="qf__body">
+            <div class="qf__row">
+              <label class="qf__field"><span>Nom et prénom <b>*</b></span><input name="nom" type="text" autocomplete="name" required placeholder="Jean Dupont" /></label>
+              <label class="qf__field"><span>Téléphone <b>*</b></span><input name="telephone" type="tel" autocomplete="tel" required placeholder="0470 00 00 00" /></label>
+            </div>
+            <label class="qf__field"><span>E-mail</span><input name="email" type="email" autocomplete="email" placeholder="vous@exemple.be" /></label>
+            <label class="qf__field"><span>Marque <b>*</b></span>
+              <span class="qf__select"><select name="marque" required>
+                  <option value="" selected disabled>Choisissez la marque</option>
+                  <option>Alfa Romeo</option>
+                  <option>Audi</option>
+                  <option>BMW</option>
+                  <option>Citroën</option>
+                  <option>Cupra</option>
+                  <option>Dacia</option>
+                  <option>DS</option>
+                  <option>Fiat</option>
+                  <option>Ford</option>
+                  <option>Honda</option>
+                  <option>Hyundai</option>
+                  <option>Jaguar</option>
+                  <option>Jeep</option>
+                  <option>Kia</option>
+                  <option>Land Rover</option>
+                  <option>Lexus</option>
+                  <option>Mazda</option>
+                  <option>Mercedes-Benz</option>
+                  <option>MG</option>
+                  <option>Mini</option>
+                  <option>Mitsubishi</option>
+                  <option>Nissan</option>
+                  <option>Opel</option>
+                  <option>Peugeot</option>
+                  <option>Porsche</option>
+                  <option>Renault</option>
+                  <option>Seat</option>
+                  <option>Škoda</option>
+                  <option>Smart</option>
+                  <option>Subaru</option>
+                  <option>Suzuki</option>
+                  <option>Tesla</option>
+                  <option>Toyota</option>
+                  <option>Volkswagen</option>
+                  <option>Volvo</option>
+                  <option>Autre marque</option>
+                </select><svg class="qf__chev" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m7 10 5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </label>
+            <div class="qf__row">
+              <label class="qf__field"><span>Modèle</span><input name="modele" type="text" placeholder="Saisissez le modèle" disabled data-needs-brand /></label>
+              <label class="qf__field"><span>Année de construction</span>
+                <span class="qf__select"><select name="annee" disabled data-needs-brand><option value="" selected>Choisissez l'année</option></select><svg class="qf__chev" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m7 10 5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </label>
+            </div>
+            <label class="qf__field"><span>Type d'intervention</span>
+              <span class="qf__select"><select name="intervention">
+                  <option value="" selected>Choisissez l'intervention</option>
+                  <option>Carrosserie (choc, bosse, rayure)</option>
+                  <option>Peinture en cabine</option>
+                  <option>Polissage, jantes, phares</option>
+                  <option>Mécanique / entretien</option>
+                  <option>Autre demande</option>
+                </select><svg class="qf__chev" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m7 10 5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </label>
+            <label class="qf__field"><span>Votre message</span><textarea name="message" rows="3" placeholder="Décrivez les dégâts ou l'intervention souhaitée"></textarea></label>
+            <p class="qf__error" role="alert" hidden>Merci de remplir les champs obligatoires (*).</p>
+            <button class="qf__submit" type="submit">Envoyer ma demande de devis</button>
+            <p class="qf__note">L'envoi ouvre votre messagerie avec la demande pré-remplie à <b>carrosserievanpraet@gmail.com</b>. Pensez à joindre vos photos.</p>
+          </div>
+        </form>
       </div>
     </section>
   </main>
@@ -426,6 +511,7 @@
           <address>
             <a href="https://maps.app.goo.gl/2hibFTy7Ff3hPFmB8" target="_blank" rel="noopener">Rue François-Joseph Navez 103<br />1030 Schaerbeek, Bruxelles</a>
             <a class="footer__tel" href="tel:+32477777036">+32 477 77 70 36</a>
+            <a href="mailto:carrosserievanpraet@gmail.com">carrosserievanpraet@gmail.com</a>
           </address>
           <p class="footer__small">Paiement&nbsp;: espèces, Bancontact, carte de crédit</p>
         </div>
@@ -475,7 +561,7 @@
       <button type="button" class="legal__close" data-close aria-label="Fermer">×</button>
       <h3 id="legal-title">Mentions légales</h3>
       <h4>Éditeur du site</h4>
-      <p>Carrosserie Van Praet SRL (société à responsabilité limitée)<br />Siège&nbsp;: Rue François-Joseph Navez 103, 1030 Schaerbeek, Belgique<br />Numéro d’entreprise (BCE) et TVA&nbsp;: BE&nbsp;0789.397.084 — RPM Bruxelles<br />Téléphone&nbsp;: <a href="tel:+32477777036">+32 477 77 70 36</a><br />E-mail&nbsp;: [adresse e-mail à compléter]</p>
+      <p>Carrosserie Van Praet SRL (société à responsabilité limitée)<br />Siège&nbsp;: Rue François-Joseph Navez 103, 1030 Schaerbeek, Belgique<br />Numéro d’entreprise (BCE) et TVA&nbsp;: BE&nbsp;0789.397.084 — RPM Bruxelles<br />Téléphone&nbsp;: <a href="tel:+32477777036">+32 477 77 70 36</a><br />E-mail&nbsp;: <a href="mailto:carrosserievanpraet@gmail.com">carrosserievanpraet@gmail.com</a></p>
       <h4>Hébergement</h4>
       <p>[Nom, adresse et contact de l’hébergeur à compléter lors de la mise en ligne.]</p>
       <h4>Propriété intellectuelle</h4>
@@ -491,7 +577,7 @@
       <button type="button" class="legal__close" data-close aria-label="Fermer">×</button>
       <h3 id="privacy-title">Confidentialité</h3>
       <h4>Aucun suivi sur ce site</h4>
-      <p>Ce site ne dépose aucun cookie publicitaire ni de mesure d’audience et ne comporte pas de formulaire. Les polices sont hébergées sur le site lui-même, sans appel à un service tiers.</p>
+      <p>Ce site ne dépose aucun cookie publicitaire ni de mesure d’audience. Le formulaire de devis n’enregistre rien sur le site : il prépare un e-mail que vous envoyez vous-même depuis votre messagerie. Les polices sont hébergées sur le site lui-même, sans appel à un service tiers.</p>
       <h4>Données transmises à l’atelier</h4>
       <p>Lorsque vous appelez l’atelier ou lui envoyez des photos, les informations communiquées (nom, coordonnées, véhicule, photos des dégâts) servent uniquement à établir votre devis et à réaliser la réparation. Elles sont traitées sur la base de mesures précontractuelles et du contrat (article 6.1.b du RGPD) et conservées le temps nécessaire, puis selon les obligations comptables légales.</p>
       <h4>Vos droits</h4>

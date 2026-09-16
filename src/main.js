@@ -96,6 +96,36 @@ const presta = initPrestations(document.getElementById('prestations'), { lenis, 
 /* ---------- Avis Google en boucle ---------- */
 initGoogleReviews(document.getElementById('avis-google'), { lenis, reduced })
 
+/* ---------- Formulaire de devis → e-mail pré-rempli ---------- */
+{
+  const form = document.getElementById('quote-form')
+  const brand = form.elements.marque
+  const year = form.elements.annee
+  const now = new Date().getFullYear()
+  for (let y = now; y >= 1970; y--) year.add(new Option(String(y), String(y)))
+  // Modèle et année se déverrouillent une fois la marque choisie (comme la référence)
+  brand.addEventListener('change', () => form.querySelectorAll('[data-needs-brand]').forEach((el) => { el.disabled = !brand.value }))
+  const err = form.querySelector('.qf__error')
+  form.addEventListener('input', (e) => e.target.classList.remove('is-invalid'))
+  form.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const required = [form.elements.nom, form.elements.telephone, brand]
+    const bad = required.filter((el) => !el.value.trim())
+    required.forEach((el) => el.classList.toggle('is-invalid', bad.includes(el)))
+    err.hidden = !bad.length
+    if (bad.length) return bad[0].focus()
+    const v = (n) => form.elements[n].value.trim() || '—'
+    const subject = `Demande de devis — ${v('marque')} ${form.elements.modele.value.trim()}`.trim()
+    const body = [
+      'Bonjour,', '', 'Je souhaite recevoir un devis gratuit.', '',
+      `Nom : ${v('nom')}`, `Téléphone : ${v('telephone')}`, `E-mail : ${v('email')}`, '',
+      `Marque : ${v('marque')}`, `Modèle : ${v('modele')}`, `Année : ${v('annee')}`, `Intervention : ${v('intervention')}`, '',
+      'Message :', v('message'), '', '(Photos des dégâts en pièce jointe)',
+    ].join('\n')
+    window.location.href = `mailto:carrosserievanpraet@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  })
+}
+
 /* ---------- FAQ ---------- */
 initFaq(document.getElementById('faq'), { reduced })
 
@@ -390,3 +420,8 @@ if (!reduced) {
 }
 
 window.addEventListener('load', () => ScrollTrigger.refresh())
+
+/* ---------- Affichage : la page apparaît quand styles, polices et animations sont en place ---------- */
+Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 600))]).then(() => {
+  requestAnimationFrame(() => document.documentElement.classList.add('is-ready'))
+})
