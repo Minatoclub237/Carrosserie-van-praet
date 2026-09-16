@@ -77,9 +77,23 @@ const MODELS = {
     g.scale.setScalar(0.62)
     return g
   },
-  van: () => {
-    const g = vehicle([[-2, 0.05], [-2, 1.9], [0.95, 1.9], [1.55, 1.05], [2.05, 0.8], [2.05, 0.05]], 1.6, [-1.25, 1.35], 0.36)
-    g.scale.setScalar(0.56)
+  brake: () => {
+    // Disque ventilé percé + moyeu + étrier
+    const g = new Group()
+    const disc = wire(new CylinderGeometry(1, 1, 0.16, 48, 1)); disc.rotation.x = Math.PI / 2; g.add(disc)
+    const hat = wire(new CylinderGeometry(0.42, 0.42, 0.34, 32, 2)); hat.rotation.x = Math.PI / 2; hat.position.z = 0.14; g.add(hat)
+    for (let i = 0; i < 5; i++) {
+      const a = (i / 5) * Math.PI * 2
+      const stud = wire(new CylinderGeometry(0.05, 0.05, 0.3, 10), { dense: false })
+      stud.rotation.x = Math.PI / 2; stud.position.set(Math.cos(a) * 0.26, Math.sin(a) * 0.26, 0.32); g.add(stud)
+    }
+    for (let i = 0; i < 18; i++) {
+      const a = (i / 18) * Math.PI * 2
+      const hole = wire(new CylinderGeometry(0.035, 0.035, 0.18, 8), { dense: false })
+      hole.rotation.x = Math.PI / 2; hole.position.set(Math.cos(a) * 0.72, Math.sin(a) * 0.72, 0); g.add(hole)
+    }
+    const caliper = wire(new BoxGeometry(0.62, 0.34, 0.5, 4, 2, 2)); caliper.position.set(0.62, 0.62, 0); caliper.rotation.z = -Math.PI / 4; g.add(caliper)
+    g.scale.setScalar(1.05)
     return g
   },
   wheel: () => {
