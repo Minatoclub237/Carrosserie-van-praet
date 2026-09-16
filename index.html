@@ -69,8 +69,19 @@
             </h1>
             <p class="hero__sub"><span class="mask"><span class="mask__line">Toutes marques, rue François-Joseph Navez 103.</span></span><span class="mask"><span class="mask__line">Devis gratuit sous 24&nbsp;h, garantie 2&nbsp;ans.</span></span></p>
             <div class="hero__actions">
-              <a class="block-cta hero__cta" href="#devis"><span class="block-cta__arrow">↗</span><span class="block-cta__label">Devis gratuit 24 h</span></a>
-              <a class="hero__call" href="tel:+32477777036">0477 77 70 36</a>
+              <!-- CTA principal : explorer le catalogue (différent de la nav) -->
+              <a class="hero-btn" href="#prestations">
+                <span class="hero-btn__label">Découvrir nos 51 prestations</span>
+                <span class="hero-btn__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </a>
+              <!-- CTA secondaire : appel avec statut d'ouverture en direct -->
+              <a class="hero-call" href="tel:+32477777036" aria-describedby="hero-status">
+                <span class="hero-call__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z" fill="currentColor"/></svg></span>
+                <span class="hero-call__text">
+                  <span class="hero-call__status" id="hero-status"><i class="hero-call__dot"></i><span data-open-status>Horaires : lun – sam</span></span>
+                  <span class="hero-call__number">0477 77 70 36</span>
+                </span>
+              </a>
             </div>
           </div>
 

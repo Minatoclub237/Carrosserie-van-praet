@@ -39,6 +39,35 @@ const video = document.querySelector('.hero__video')
 video.play().catch(() => {})
 document.addEventListener('visibilitychange', () => { if (!document.hidden) video.play().catch(() => {}) })
 
+/* ---------- Statut d'ouverture en direct (heure de Bruxelles) ---------- */
+{
+  const HOURS = { 1: [9, 18], 2: [9, 18], 3: [9, 18], 4: [9, 18], 5: [9, 18], 6: [9, 14] } // dimanche fermé
+  const DAYS = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi']
+  const card = document.querySelector('.hero-call')
+  const label = card?.querySelector('[data-open-status]')
+  const update = () => {
+    const parts = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Brussels', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false })
+      .formatToParts(new Date()).map((p) => [p.type, p.value]))
+    const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(parts.weekday)
+    const now = +parts.hour % 24 + +parts.minute / 60
+    const today = HOURS[day]
+    const open = today && now >= today[0] && now < today[1]
+    let text
+    if (open) text = `Ouvert · jusqu’à ${today[1]}:00`
+    else {
+      // prochaine ouverture : plus tard aujourd'hui ou jour suivant
+      let d = day, first = true
+      while (!(HOURS[d] && (!first || now < HOURS[d][0]))) { d = (d + 1) % 7; first = false }
+      const when = d === day ? 'aujourd’hui' : d === (day + 1) % 7 ? 'demain' : DAYS[d]
+      text = `Fermé · ouvre ${when} à ${HOURS[d][0]}:00`
+    }
+    label.textContent = text
+    card.classList.toggle('is-open', !!open)
+    card.classList.toggle('is-closed', !open)
+  }
+  if (card) { update(); setInterval(update, 60000) }
+}
+
 /* ---------- Nav : largeur pleine au repos, recadrée sur la grille dès qu'on défile ---------- */
 const nav = document.getElementById('nav')
 const setNav = (y) => nav.classList.toggle('is-scrolled', y > 8)
@@ -144,7 +173,8 @@ if (!reduced) {
   // Arrivée : titre ligne par ligne, puis informations, actions et badges d'avis
   gsap.fromTo('.hero__title .mask__line', { yPercent: 115 }, { yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: 0.09, delay: 0.15 })
   gsap.fromTo('.hero__sub .mask__line', { yPercent: 115 }, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.09, delay: 0.5 })
-  gsap.fromTo(['.hero__eyebrow', '.hero__actions'], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.7 })
+  gsap.fromTo('.hero__eyebrow', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.7 })
+  gsap.fromTo(['.hero-btn', '.hero-call'], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.85 })
   gsap.fromTo('.hero-badge', { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.9 })
 
   // Séquence au défilement : le titre se disperse, les chiffres montent et comptent
