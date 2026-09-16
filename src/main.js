@@ -11,6 +11,7 @@ import { initFaq } from './faq.js'
 import { initPrestations } from './prestations.js'
 import { initGoogleReviews } from './google-reviews.js'
 import { initDock } from './dock.js'
+import { initBeforeAfter } from './before-after.js'
 
 gsap.registerPlugin(ScrollTrigger)
 // Mobile : la barre d'adresse qui se replie ne doit pas recalculer (et faire sauter) les animations
@@ -89,6 +90,9 @@ const nav = document.getElementById('nav')
 const setNav = (y) => nav.classList.toggle('is-scrolled', y > 8)
 setNav(window.scrollY)
 lenis ? lenis.on('scroll', ({ scroll }) => setNav(scroll)) : window.addEventListener('scroll', () => setNav(window.scrollY), { passive: true })
+
+/* ---------- Avant / après des cartes services ---------- */
+initBeforeAfter(document.querySelector('.capabilities'), { reduced })
 
 /* ---------- Bande des marques ---------- */
 renderBrands(document.querySelector('.brands__track'))

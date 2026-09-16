@@ -991,3 +991,21 @@ export const META = {
   "description": "Carrosserie Van Praet, François-Joseph Navezstraat 103 in Schaarbeek: carrosserie, lakwerk in spuitcabine, polijsten en mechanica voor alle merken. Gratis offerte binnen 24 u, vaste prijs, 2 jaar garantie."
  }
 }
+
+// Avant / après des cartes services
+Object.assign(STRINGS, {
+  'ba-before': { en: 'Before', nl: 'Voor' },
+  'ba-after': { en: 'After', nl: 'Na' },
+  'ba-hint': { en: 'Drag', nl: 'Schuif' },
+})
+ATTRS.push(
+  ['.ba', 'aria-label', { en: 'Compare before and after', nl: 'Voor en na vergelijken' }],
+  ['.cap-card:nth-child(1) .ba__before', 'alt', { en: 'Grey hatchback with a dented front wing and scratched bumper', nl: 'Grijze wagen met ingedeukt voorspatbord en gekraste bumper' }],
+  ['.cap-card:nth-child(1) .ba__after', 'alt', { en: 'The same car after dent repair: wing and bumper restored', nl: 'Dezelfde wagen na het uitdeuken: spatbord en bumper hersteld' }],
+  ['.cap-card:nth-child(2) .ba__before', 'alt', { en: 'Red bonnet with peeling paint in the booth', nl: 'Rode motorkap met afbladderende lak in de spuitcabine' }],
+  ['.cap-card:nth-child(2) .ba__after', 'alt', { en: 'The same bonnet repainted in the booth, glossy clear coat', nl: 'Dezelfde motorkap overgespoten in de cabine, glanzende blanke lak' }],
+  ['.cap-card:nth-child(3) .ba__before', 'alt', { en: 'Yellowed headlight and dirty wheel', nl: 'Vergeelde koplamp en vuile velg' }],
+  ['.cap-card:nth-child(3) .ba__after', 'alt', { en: 'Restored headlight and cleaned, polished wheel', nl: 'Gerenoveerde koplamp en gereinigde, gepolijste velg' }],
+  ['.cap-card:nth-child(4) .ba__before', 'alt', { en: 'Rusty brake disc and dull calliper', nl: 'Roestige remschijf en doffe remklauw' }],
+  ['.cap-card:nth-child(4) .ba__after', 'alt', { en: 'New brake disc and repainted calliper', nl: 'Nieuwe remschijf en overgespoten remklauw' }],
+)

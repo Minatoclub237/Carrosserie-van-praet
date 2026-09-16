@@ -207,17 +207,42 @@ img, video, canvas, svg { display: block; }
 .capabilities .label { margin-bottom: 1.7vw; color: #d9d9d3; }
 .capabilities__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.57vw; }
 .cap-card {
-  position: relative; display: flex; flex-direction: column; justify-content: flex-end;
-  min-height: 18.5vw; padding: 1.1vw;
-  background: var(--card);
+  position: relative; display: flex; flex-direction: column;
+  padding: .7vw; background: var(--card); border-radius: 14px;
   transition: background .4s;
 }
 .cap-card:hover { background: #33332f; }
-.cap-card__icon { position: absolute; top: 1.2vw; left: 1.1vw; width: 3.6vw; height: 3.6vw; color: #eaeae4; }
+.cap-card__body { position: relative; flex: 1; display: flex; flex-direction: column; padding: 1.2vw .5vw .5vw; }
+.cap-card__icon { width: 34px; height: 34px; margin-bottom: 1vw; color: #eaeae4; }
 .cap-card__icon .spin { transform-origin: 24px 24px; transition: transform 1.2s var(--ease); }
 .cap-card:hover .cap-card__icon .spin { transform: rotate(45deg); }
-.cap-card__title { font-family: var(--futur); font-size: 1.2vw; font-weight: 400; line-height: 1.2; letter-spacing: .01em; margin-bottom: .7vw; }
-.cap-card__text { font-size: 16px; line-height: 1.3; color: var(--muted); }
+.cap-card__title { font-family: var(--futur); font-size: 1.2vw; font-weight: 400; line-height: 1.2; letter-spacing: .03em; margin-bottom: .7vw; -webkit-text-stroke: .03em currentColor; }
+.cap-card__text { font-size: 16px; line-height: 1.35; color: var(--muted); }
+
+/* Avant / après : photo « après » découverte par clip-path, même cadrage au pixel près */
+.ba { position: relative; overflow: hidden; aspect-ratio: 1200 / 896; border-radius: 10px; background: #222220;
+  user-select: none; -webkit-user-select: none; touch-action: pan-y; cursor: ew-resize; }
+.ba img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.ba__after { clip-path: inset(0 0 0 var(--x, 50%)); }
+.ba__tag { position: absolute; bottom: 10px; z-index: 3; padding: 5px 10px; border-radius: 999px; pointer-events: none;
+  background: rgba(10,10,10,.6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); color: #fff;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; transition: opacity .3s; }
+.ba__tag--before { left: 10px; }
+.ba__tag--after { right: 10px; background: var(--blue); }
+.ba.at-after .ba__tag--before, .ba.at-before .ba__tag--after { opacity: 0; }
+.ba__handle { position: absolute; top: 0; bottom: 0; left: var(--x, 50%); z-index: 4; width: 2px; transform: translateX(-1px);
+  background: rgba(255,255,255,.95); box-shadow: 0 0 0 1px rgba(0,0,0,.2); pointer-events: none; }
+.ba__knob { position: absolute; top: 50%; left: 50%; width: 38px; height: 38px; margin: -19px 0 0 -19px; border-radius: 50%;
+  background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; gap: 4px;
+  transition: transform .3s var(--ease); }
+.ba__knob::before, .ba__knob::after { content: ''; width: 0; height: 0; border-top: 4px solid transparent; border-bottom: 4px solid transparent; }
+.ba__knob::before { border-right: 6px solid var(--blue); }
+.ba__knob::after { border-left: 6px solid var(--blue); }
+.ba:hover .ba__knob, .ba:active .ba__knob { transform: scale(1.1); }
+.ba__hint { position: absolute; top: 10px; left: 50%; z-index: 3; transform: translateX(-50%); padding: 4px 10px; border-radius: 999px; pointer-events: none;
+  background: rgba(10,10,10,.55); color: #fff; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; transition: opacity .45s; }
+.ba.touched .ba__hint { opacity: 0; }
+.ba:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 .outline-btn {
   display: inline-flex; gap: 8px; align-items: center; margin-top: 2.35vw;
   height: 2.35vw; min-height: 32px; padding-inline: 12px;
@@ -626,11 +651,13 @@ img, video, canvas, svg { display: block; }
   .hero__ticker-track { font-size: 11px; animation-duration: 30s; }
   .expertise__text { max-width: none; font-size: 6.2vw; }
   .capabilities__grid, .industries__grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .cap-card { min-height: 220px; padding: 14px; }
+  .cap-card { padding: 8px; }
+  .cap-card__body { padding: 14px 6px 8px; }
   .brands { margin-top: 40px; }
   .brands__track { animation-duration: 30s; }
   .capabilities { padding-top: 48px; }
-  .cap-card__icon { top: 14px; left: 14px; width: 40px; height: 40px; }
+  .cap-card__icon { width: 30px; height: 30px; margin-bottom: 10px; }
+  .ba__knob { width: 44px; height: 44px; margin: -22px 0 0 -22px; }
   .cap-card__title, .ind-card__title { font-size: 17px; }
   .outline-btn { margin-top: 20px; }
   .panel-card { width: 100%; min-height: 0; padding: 56px 20px 24px; top: 72px; margin-bottom: 38vh; }
