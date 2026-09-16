@@ -1,4 +1,5 @@
-import '@fontsource-variable/inter'
+import '@fontsource-variable/unbounded'
+import '@fontsource-variable/sora'
 import '@fontsource/monaspace-neon/400.css'
 import './style.css'
 import gsap from 'gsap'
@@ -167,7 +168,7 @@ if (!reduced) {
   })
   // « Un devis en 24 h ? » : arrive énorme et très espacé, se resserre à sa place
   gsap.fromTo('[data-zoom-title]', { scale: 2.1, letterSpacing: '0.18em', opacity: 0.2, transformOrigin: '0% 100%' }, {
-    scale: 1, letterSpacing: '-0.015em', opacity: 1, ease: 'power2.out',
+    scale: 1, letterSpacing: '-0.02em', opacity: 1, ease: 'power2.out',
     scrollTrigger: { trigger: '.quote__box', start: 'top bottom', end: 'top 30%', scrub },
   })
   // Nom géant du pied de page : les lettres remontent du sol
