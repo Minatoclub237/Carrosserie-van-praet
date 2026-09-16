@@ -44,6 +44,7 @@
         <a href="#services">Services</a>
         <a href="#atelier">Atelier</a>
         <a href="#avis">Avis</a>
+        <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
       </nav>
       <div class="nav__cta">
@@ -87,7 +88,7 @@
       </div>
       <div class="cross-row"><i class="cross"></i><i class="cross"></i></div>
       <!-- BANDE DES MARQUES : défile en boucle de droite à gauche (CSS, ordinateur et mobile) -->
-      <div class="brands" aria-label="Marques prises en charge">
+      <div class="brands" id="marques" aria-label="Marques prises en charge">
         <div class="brands__track"></div>
       </div>
       <div class="capabilities">
@@ -210,7 +211,7 @@
     </section>
 
     <!-- COMMENT ÇA SE PASSE : scène épinglée -->
-    <section class="process" aria-label="Comment ça se passe">
+    <section class="process" id="etapes" aria-label="Comment ça se passe">
       <div class="process__stage">
         <div class="process__head container">
           <p class="label">Comment ça se passe</p>
@@ -258,29 +259,34 @@
       </div>
     </section>
 
-    <!-- CARTE RÉELLE -->
-    <section class="location container" id="contact">
-      <svg class="location__map" id="map" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
-      <div class="cross-row"><i class="cross"></i><i class="cross"></i></div>
-      <div class="location__body">
-        <h2 class="location__title" data-flip>Au cœur de<br /><span class="accent">Schaerbeek</span></h2>
-        <p class="location__text" data-scroll-text>Rue François-Joseph Navez 103, 1030 Schaerbeek. Accueil en français et en néerlandais.</p>
-        <table class="hours" aria-label="Horaires d'ouverture">
-          <tr data-day="1"><th>Lundi</th><td>9:00 – 18:00</td></tr>
-          <tr data-day="2"><th>Mardi</th><td>9:00 – 18:00</td></tr>
-          <tr data-day="3"><th>Mercredi</th><td>9:00 – 18:00</td></tr>
-          <tr data-day="4"><th>Jeudi</th><td>9:00 – 18:00</td></tr>
-          <tr data-day="5"><th>Vendredi</th><td>9:00 – 18:00</td></tr>
-          <tr data-day="6"><th>Samedi</th><td>9:00 – 13:30</td></tr>
-          <tr data-day="0"><th>Dimanche</th><td>Fermé</td></tr>
-        </table>
-        <div class="location__actions">
-          <a class="outline-btn outline-btn--light" href="https://maps.app.goo.gl/2hibFTy7Ff3hPFmB8" target="_blank" rel="noopener">Itinéraire <span>↗</span></a>
-          <a class="outline-btn outline-btn--light" href="tel:+32477777036">0477 77 70 36</a>
+    <!-- FAQ : objections réelles, un CTA bleu par réponse -->
+    <section class="faq" id="faq">
+      <div class="faq__inner">
+        <header class="faq__header">
+          <div class="faq__intro">
+            <span class="faq__pill" data-fade="0.1"><i class="faq__dot"></i>FAQ</span>
+            <h2 class="faq__title" data-fade="0.1">Les réponses aux questions<br class="faq__br" /> <span class="accent">qu’on nous pose vraiment.</span></h2>
+          </div>
+          <p class="faq__lead" data-fade="0.2">Prix, délais, garantie, pièces, assurance&nbsp;: ce que les clients veulent savoir avant de confier leur voiture à l’atelier de Schaerbeek.</p>
+        </header>
+        <div class="faq__grid">
+          <div class="faq__side">
+            <div class="faq__tabs-wrap">
+              <div class="faq__tabs spot"></div>
+            </div>
+            <div class="faq__help spot"><span class="spot-ring" aria-hidden="true"></span>
+              <div class="faq__help-card spot"><span class="spot-ring" aria-hidden="true"></span>
+                <h3>Une autre question&nbsp;?</h3>
+                <p>Chaque véhicule est différent. Un appel suffit souvent pour savoir comment l’atelier peut vous aider.</p>
+                <a class="faq__help-link" href="tel:+32477777036">Appeler le 0477 77 70 36 <span aria-hidden="true">→</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="faq__panel spot"><span class="spot-ring" aria-hidden="true"></span>
+            <div class="faq__list"></div>
+          </div>
         </div>
       </div>
-      <div class="cross-row"><i class="cross"></i><i class="cross"></i></div>
-      <p class="location__credit">Carte © contributeurs OpenStreetMap</p>
     </section>
 
     <!-- DEVIS -->
@@ -295,7 +301,7 @@
     </section>
   </main>
 
-  <footer class="footer container">
+  <footer class="footer container" id="contact">
     <div class="footer__mark" aria-hidden="true" data-footer-mark>Carrosserie<br />Van Praet</div>
     <div class="footer__cols">
       <div class="footer__col footer__col--contact">
@@ -308,7 +314,7 @@
       </div>
       <div class="footer__col">
         <p class="label">Plan du site</p>
-        <ul><li><a href="#services">Services</a></li><li><a href="#atelier">Atelier</a></li><li><a href="#avis">Avis</a></li><li><a href="#contact">Contact</a></li></ul>
+        <ul><li><a href="#services">Services</a></li><li><a href="#atelier">Atelier</a></li><li><a href="#avis">Avis</a></li><li><a href="#faq">FAQ</a></li><li><a href="#contact">Contact</a></li></ul>
       </div>
     </div>
     <div class="footer__bottom">

@@ -5,8 +5,8 @@ import './style.css'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
-import { MAP_W, MAP_H, PIN, MAJOR, MINOR, RAIL, PARK } from './streets.js'
 import { renderBrands } from './brands.js'
+import { initFaq } from './faq.js'
 
 gsap.registerPlugin(ScrollTrigger)
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -42,21 +42,8 @@ lenis ? lenis.on('scroll', ({ scroll }) => setNav(scroll)) : window.addEventList
 /* ---------- Bande des marques ---------- */
 renderBrands(document.querySelector('.brands__track'))
 
-/* ---------- Horaires : jour courant à Bruxelles ---------- */
-const today = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  .indexOf(new Date().toLocaleString('en-US', { timeZone: 'Europe/Brussels', weekday: 'short' }))
-document.querySelector(`.hours tr[data-day="${today}"]`)?.classList.add('is-today')
-
-/* ---------- Carte réelle (OpenStreetMap) ---------- */
-const map = document.getElementById('map')
-map.setAttribute('viewBox', `0 0 ${MAP_W} ${MAP_H}`)
-map.innerHTML =
-  `<path class="st-park" d="${PARK}"/>` +
-  `<path class="st-rail" d="${RAIL}"/>` +
-  `<path class="st-minor" d="${MINOR}" pathLength="1"/>` +
-  `<path class="st-major" d="${MAJOR}" pathLength="1"/>` +
-  `<g class="location__pin" transform="translate(${PIN[0]} ${PIN[1]})">` +
-  `<circle class="location__pulse" r="34"/><g class="location__drop"><use href="#mark" x="-26" y="-58" width="52" height="52"/></g></g>`
+/* ---------- FAQ ---------- */
+initFaq(document.getElementById('faq'), { reduced })
 
 /* ---------- Découpes ---------- */
 // Mots masqués (conserve <br> et espaces insécables)
@@ -309,17 +296,6 @@ if (!reduced) {
     onUpdate: () => { score.textContent = scoreObj.v.toFixed(1).replace('.', ',') },
     scrollTrigger: { trigger: '.reviews', start: 'top 85%', end: 'top 10%', scrub },
   })
-
-  /* ================= CARTE ================= */
-  const mapST = { trigger: '.location', start: 'top bottom', end: 'center 45%', scrub }
-  gsap.fromTo('.st-minor', { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, ease: 'none', scrollTrigger: mapST })
-  gsap.fromTo('.st-major', { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, ease: 'power1.inOut', scrollTrigger: mapST })
-  gsap.fromTo(['.st-rail', '.st-park'], { opacity: 0 }, { opacity: 1, ease: 'none', scrollTrigger: mapST })
-  gsap.fromTo('.location__drop', { y: -260, opacity: 0 }, {
-    y: 0, opacity: 1, ease: 'bounce.out',
-    scrollTrigger: { trigger: '.location', start: 'top 55%', end: 'top 15%', scrub },
-  })
-  gsap.fromTo('.location__map', { yPercent: 6 }, { yPercent: -6, ease: 'none', scrollTrigger: { trigger: '.location', start: 'top bottom', end: 'bottom top', scrub: true } })
 }
 
 window.addEventListener('load', () => ScrollTrigger.refresh())
