@@ -10,6 +10,7 @@ import { renderBrands } from './brands.js'
 import { initFaq } from './faq.js'
 import { initPrestations } from './prestations.js'
 import { initGoogleReviews } from './google-reviews.js'
+import { initDock } from './dock.js'
 
 gsap.registerPlugin(ScrollTrigger)
 // Mobile : la barre d'adresse qui se replie ne doit pas recalculer (et faire sauter) les animations
@@ -150,6 +151,9 @@ const MAIL_TEXT = {
 /* ---------- FAQ ---------- */
 const faq = initFaq(document.getElementById('faq'), { reduced })
 
+/* ---------- Barre d'action flottante (mobile) ---------- */
+const dock = initDock()
+
 /* ---------- Découpes ---------- */
 // Mots masqués (conserve <br> et espaces insécables)
 function splitWords(el) {
@@ -288,12 +292,10 @@ function buildMotion({ intro }) {
   /* ================= HERO ================= */
   const heroChars = gsap.utils.toArray('.hero__title [data-chars]').flatMap((el) => splitChars(fresh(el)))
   if (intro) {
-    // Arrivée : titre ligne par ligne, puis informations, actions et badges d'avis
-    gsap.fromTo('.hero__title .mask__line', { yPercent: 115 }, { yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: 0.09, delay: 0.15 })
-    gsap.fromTo('.hero__sub .mask__line', { yPercent: 115 }, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.09, delay: 0.5 })
-    gsap.fromTo('.hero__eyebrow', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.7 })
-    gsap.fromTo(['.hero-btn', '.hero-call'], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.85 })
-    gsap.fromTo('.hero-badge', { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.9 })
+    // État de départ posé tout de suite : l'arrivée est jouée quand le rideau de chargement se lève
+    gsap.set(['.hero__title .mask__line', '.hero__sub .mask__line'], { yPercent: 115 })
+    gsap.set(['.hero__eyebrow', '.hero-btn', '.hero-call'], { opacity: 0, y: 20 })
+    gsap.set('.hero-badge', { opacity: 0, x: 40 })
   }
 
   // Séquence au défilement : le titre se disperse, les chiffres montent et comptent
@@ -464,6 +466,15 @@ function buildMotion({ intro }) {
 
 let motion = reduced ? null : gsap.context(() => buildMotion({ intro: true }))
 
+// Arrivée du hero : titre ligne par ligne, puis informations, actions et badges d'avis
+function playIntro() {
+  gsap.to('.hero__title .mask__line', { yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: 0.09 })
+  gsap.to('.hero__sub .mask__line', { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.09, delay: 0.35 })
+  gsap.to('.hero__eyebrow', { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.5 })
+  gsap.to(['.hero-btn', '.hero-call'], { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.65 })
+  gsap.to('.hero-badge', { opacity: 1, x: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.7 })
+}
+
 /* ---------- Sélecteur de langue : bascule instantanée, animations reconstruites sur place ---------- */
 const switcher = document.querySelector('[data-lang-switch]')
 const syncSwitch = () => {
@@ -479,6 +490,7 @@ function changeLanguage(next) {
   faq.setLang()
   presta.setLang()
   greviews.setLang()
+  dock.setLang()
   updateStatus()
   if (!reduced) motion = gsap.context(() => buildMotion({ intro: false }))
   ScrollTrigger.refresh()
@@ -504,7 +516,25 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(
 
 window.addEventListener('load', () => ScrollTrigger.refresh())
 
-/* ---------- Affichage : la page apparaît quand styles, polices et animations sont en place ---------- */
-Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 600))]).then(() => {
-  requestAnimationFrame(() => document.documentElement.classList.add('is-ready'))
-})
+/* ---------- Intro de chargement : le logo se dessine, puis le rideau se lève sur le hero ---------- */
+{
+  const loader = document.getElementById('loader')
+  let quick = true
+  try { quick = !!sessionStorage.getItem('vp-intro') } catch {}
+  const minDuration = quick || reduced ? 0 : 1350 // le temps que le logo finisse de se dessiner
+  const fontsReady = Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 900))])
+  const minTime = new Promise((r) => setTimeout(r, Math.max(0, minDuration - performance.now())))
+  Promise.all([fontsReady, minTime]).then(() => {
+    try { sessionStorage.setItem('vp-intro', '1') } catch {}
+    const start = () => (motion ? motion.add(playIntro) : null)
+    if (!loader) return start()
+    if (reduced) { loader.remove(); return }
+    lenis?.stop()
+    gsap.timeline()
+      .to('.loader__bar i', { scaleX: 1, duration: quick ? 0 : 0.22, ease: 'power2.out' }, 0)
+      .to('.loader__inner', { opacity: 0, y: -24, duration: quick ? 0.15 : 0.32, ease: 'power2.in' }, quick ? 0 : 0.1)
+      .to(loader, { clipPath: 'inset(0% 0% 100% 0%)', duration: quick ? 0.4 : 0.75, ease: 'power4.inOut', onComplete: () => { loader.remove(); lenis?.start(); ScrollTrigger.refresh() } }, quick ? 0 : 0.2)
+      .fromTo('.hero__video', { scale: 1.12 }, { scale: 1, duration: 1.8, ease: 'power3.out', clearProps: 'transform' }, '<')
+      .add(start, quick ? 0.1 : 0.35)
+  })
+}

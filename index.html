@@ -3,9 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>html:not(.is-ready) body{opacity:0}html.is-ready body{opacity:1;transition:opacity .45s ease}body{background:#181815}html{background:#181815}</style>
-  <noscript><style>html body{opacity:1}</style></noscript>
-  <script>setTimeout(function(){document.documentElement.classList.add("is-ready")},3000)</script>
+  <!-- Intro de chargement : styles critiques en ligne, l'animation démarre avant le JavaScript -->
+  <style>
+    html,body{background:#181815}
+    #loader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#0b0b0a;clip-path:inset(0 0 0 0);animation:ld-safety 0s linear 7s forwards}
+    .loader__inner{display:flex;flex-direction:column;align-items:center;gap:26px;width:min(520px,74vw)}
+    .loader__logo{position:relative;width:100%}
+    .loader__logo img{display:block;width:100%;height:auto;clip-path:inset(0 100% 0 0);animation:ld-wipe 1s cubic-bezier(.65,0,.35,1) .2s forwards}
+    .loader__logo::after{content:"";position:absolute;top:-10%;bottom:-10%;left:0;width:2px;background:#8fb0ff;box-shadow:0 0 22px 6px rgba(46,108,255,.85);opacity:0;animation:ld-scan 1s cubic-bezier(.65,0,.35,1) .2s forwards}
+    .loader__bar{position:relative;width:100%;height:1px;background:rgba(255,255,255,.12);overflow:hidden}
+    .loader__bar i{position:absolute;inset:0;background:#2e6cff;transform:scaleX(0);transform-origin:left;animation:ld-bar 1.3s cubic-bezier(.2,.7,.2,1) forwards}
+    .loader__label{font:11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.5);opacity:0;animation:ld-fade .7s ease .8s forwards}
+    @keyframes ld-wipe{to{clip-path:inset(0 0 0 0)}}
+    @keyframes ld-scan{0%{left:0;opacity:1}88%{opacity:1}100%{left:100%;opacity:0}}
+    @keyframes ld-bar{to{transform:scaleX(.86)}}
+    @keyframes ld-fade{to{opacity:1}}
+    @keyframes ld-safety{to{visibility:hidden}}
+    html.loader-quick .loader__logo img{clip-path:none;animation:none}
+    html.loader-quick .loader__logo::after,html.loader-quick .loader__bar,html.loader-quick .loader__label{display:none}
+    @media (prefers-reduced-motion:reduce){.loader__logo img{clip-path:none;animation:none}.loader__logo::after{display:none}}
+  </style>
+  <noscript><style>#loader{display:none}</style></noscript>
+  <script>try{if(sessionStorage.getItem("vp-intro"))document.documentElement.classList.add("loader-quick")}catch(e){}</script>
+  <link rel="preload" as="image" href="/media/logo-footer.webp" />
   <title>Carrosserie Van Praet — Carrosserie, peinture et mécanique à Schaerbeek</title>
   <meta name="description" content="Carrosserie Van Praet, rue François-Joseph Navez 103 à Schaerbeek : carrosserie, peinture en cabine, polissage et mécanique toutes marques. Devis gratuit sous 24 h, prix fixe, garantie 2 ans." />
   <link rel="preload" as="image" href="/media/hero-car-poster.webp" />
@@ -36,6 +56,13 @@
   </script>
 </head>
 <body>
+  <div id="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <div class="loader__logo"><img src="/media/logo-footer.webp" width="952" height="304" alt="" /></div>
+      <div class="loader__bar"><i></i></div>
+      <p class="loader__label">Schaerbeek — 1030</p>
+    </div>
+  </div>
 
   <header class="nav" id="nav">
     <div class="nav__bar">

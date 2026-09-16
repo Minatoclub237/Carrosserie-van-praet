@@ -849,3 +849,23 @@ img, video, canvas, svg { display: block; }
   .lang__opt { height: 36px; min-width: 56px; font-size: 12px; }
   .step__cta { margin-top: 16px; height: 36px; font-size: 11px; }
 }
+
+/* ---------------- BARRE D'ACTION FLOTTANTE (mobile) ---------------- */
+.dock {
+  position: fixed; right: max(14px, env(safe-area-inset-right)); bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 60;
+  display: flex; align-items: center; gap: 6px; padding: 5px;
+  border: 1px solid rgba(255,255,255,.14); border-radius: 999px; background: rgba(12,12,11,.74);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 22px 44px -18px rgba(0,0,0,.85);
+  opacity: 0; transform: translateY(calc(100% + 30px)) scale(.9); pointer-events: none;
+  transition: transform .65s cubic-bezier(.34, 1.56, .64, 1), opacity .35s ease;
+}
+.dock.is-visible { opacity: 1; transform: none; pointer-events: auto; }
+.dock__wa { display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 16px 0 6px; border-radius: 999px; background: #25d366; color: #06301a; font-size: 15px; font-weight: 600; }
+.dock__wa-icon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #fff; }
+.dock__wa-icon svg { width: 20px; height: 20px; fill: #25d366; }
+.dock__call { position: relative; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--blue); color: #fff; }
+.dock__call::after { content: ''; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 0 0 rgba(46,108,255,.6); animation: dock-ping 2.4s ease-out infinite; }
+.dock.is-visible .dock__wa { animation: dock-nudge .9s cubic-bezier(.34, 1.56, .64, 1) .5s both; }
+@keyframes dock-ping { 70%, 100% { box-shadow: 0 0 0 13px rgba(46,108,255,0); } }
+@keyframes dock-nudge { 0% { transform: translateX(14px); } 100% { transform: none; } }
+@media (min-width: 901px) { .dock { display: none; } }
