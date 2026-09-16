@@ -3,27 +3,31 @@
 // Présentation : carrousel 3D piloté par le défilement (scène sticky, pas de pin).
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { tr } from './i18n.js'
 
 const CATALOGUE = [
-  { title: 'Carrosserie', items: ['Réparation de carrosserie (choc important, accident)', 'Rénovation de carrosserie (peinture, rayures, bosses)', 'Changement de rétroviseur', 'Réparation de rétroviseur'] },
-  { title: 'Vision', items: ['Rénovation des optiques (feux, phares)', 'Réglage des optiques', 'Changement de phare avant', 'Changement de feu arrière', 'Ampoules de phares avant', 'Ampoules de feux arrière', 'Ampoules de clignotants', 'Ampoules de feux antibrouillard', 'Balais d’essuie-glace'] },
-  { title: 'Révision & vidange', items: ['Vidange + filtre à huile', 'Vidange + 3 filtres'] },
-  { title: 'Freinage', items: ['Plaquettes de frein', 'Disques et plaquettes', 'Kit de frein à tambour arrière', 'Purge du liquide de frein'] },
-  { title: 'Embrayage', items: ['Kit d’embrayage', 'Kit d’embrayage et volant moteur', 'Vidange de boîte manuelle', 'Vidange de boîte automatique'] },
-  { title: 'Distribution', items: ['Kit de courroie de distribution', 'Chaîne de distribution', 'Courroie d’accessoire', 'Kit de courroie d’accessoire'] },
-  { title: 'Moteur', items: ['Bougies d’allumage', 'Bougies de préchauffage', 'Injecteur', 'Filtre à air', 'Filtre à carburant', 'Purge du liquide de refroidissement'] },
-  { title: 'Échappement', items: ['Filtre à particules (FAP)', 'Recharge d’additif FAP', 'Vanne EGR', 'Décalaminage', 'Silencieux arrière'] },
-  { title: 'Démarrage & charge', items: ['Batterie', 'Démarreur', 'Alternateur'] },
-  { title: 'Suspensions', items: ['Amortisseurs', 'Triangle / bras de suspension', 'Rotule de suspension', 'Biellette de barre stabilisatrice'] },
-  { title: 'Direction & transmission', items: ['Biellette de direction', 'Rotule de direction', 'Cardan', 'Soufflet de cardan'] },
-  { title: 'Climatisation', items: ['Filtre d’habitacle'] },
-  { title: 'Pneus & roues', items: ['Roulements de roue'] },
+  { title: { fr: 'Carrosserie', en: 'Bodywork', nl: 'Carrosserie' }, items: [{ fr: 'Réparation de carrosserie (choc important, accident)', en: 'Bodywork repair (major impact, accident)', nl: 'Carrosserieherstelling (zware aanrijding, ongeval)' }, { fr: 'Rénovation de carrosserie (peinture, rayures, bosses)', en: 'Bodywork renovation (paint, scratches, dents)', nl: 'Carrosserierenovatie (lak, krassen, deuken)' }, { fr: 'Changement de rétroviseur', en: 'Mirror replacement', nl: 'Buitenspiegel vervangen' }, { fr: 'Réparation de rétroviseur', en: 'Mirror repair', nl: 'Buitenspiegel herstellen' }] },
+  { title: { fr: 'Vision', en: 'Lighting', nl: 'Zicht' }, items: [{ fr: 'Rénovation des optiques (feux, phares)', en: 'Headlight restoration (lights, headlamps)', nl: 'Renovatie van koplampen en lichten' }, { fr: 'Réglage des optiques', en: 'Headlight alignment', nl: 'Afstellen van de lichten' }, { fr: 'Changement de phare avant', en: 'Front headlight replacement', nl: 'Koplamp vervangen' }, { fr: 'Changement de feu arrière', en: 'Rear light replacement', nl: 'Achterlicht vervangen' }, { fr: 'Ampoules de phares avant', en: 'Front headlight bulbs', nl: 'Lampjes koplampen' }, { fr: 'Ampoules de feux arrière', en: 'Rear light bulbs', nl: 'Lampjes achterlichten' }, { fr: 'Ampoules de clignotants', en: 'Indicator bulbs', nl: 'Lampjes richtingaanwijzers' }, { fr: 'Ampoules de feux antibrouillard', en: 'Fog light bulbs', nl: 'Lampjes mistlichten' }, { fr: 'Balais d’essuie-glace', en: 'Wiper blades', nl: 'Ruitenwisserbladen' }] },
+  { title: { fr: 'Révision & vidange', en: 'Servicing & oil change', nl: 'Onderhoud & olieverversing' }, items: [{ fr: 'Vidange + filtre à huile', en: 'Oil change + oil filter', nl: 'Olieverversing + oliefilter' }, { fr: 'Vidange + 3 filtres', en: 'Oil change + 3 filters', nl: 'Olieverversing + 3 filters' }] },
+  { title: { fr: 'Freinage', en: 'Brakes', nl: 'Remmen' }, items: [{ fr: 'Plaquettes de frein', en: 'Brake pads', nl: 'Remblokken' }, { fr: 'Disques et plaquettes', en: 'Discs and pads', nl: 'Remschijven en remblokken' }, { fr: 'Kit de frein à tambour arrière', en: 'Rear drum brake kit', nl: 'Kit trommelremmen achter' }, { fr: 'Purge du liquide de frein', en: 'Brake fluid bleed', nl: 'Remvloeistof ontluchten' }] },
+  { title: { fr: 'Embrayage', en: 'Clutch', nl: 'Koppeling' }, items: [{ fr: 'Kit d’embrayage', en: 'Clutch kit', nl: 'Koppelingskit' }, { fr: 'Kit d’embrayage et volant moteur', en: 'Clutch kit and flywheel', nl: 'Koppelingskit en vliegwiel' }, { fr: 'Vidange de boîte manuelle', en: 'Manual gearbox oil change', nl: 'Olie manuele versnellingsbak verversen' }, { fr: 'Vidange de boîte automatique', en: 'Automatic gearbox oil change', nl: 'Olie automatische versnellingsbak verversen' }] },
+  { title: { fr: 'Distribution', en: 'Timing', nl: 'Distributie' }, items: [{ fr: 'Kit de courroie de distribution', en: 'Timing belt kit', nl: 'Distributieriemkit' }, { fr: 'Chaîne de distribution', en: 'Timing chain', nl: 'Distributieketting' }, { fr: 'Courroie d’accessoire', en: 'Accessory belt', nl: 'Multiriem' }, { fr: 'Kit de courroie d’accessoire', en: 'Accessory belt kit', nl: 'Multiriemkit' }] },
+  { title: { fr: 'Moteur', en: 'Engine', nl: 'Motor' }, items: [{ fr: 'Bougies d’allumage', en: 'Spark plugs', nl: 'Bougies' }, { fr: 'Bougies de préchauffage', en: 'Glow plugs', nl: 'Gloeibougies' }, { fr: 'Injecteur', en: 'Injector', nl: 'Injector' }, { fr: 'Filtre à air', en: 'Air filter', nl: 'Luchtfilter' }, { fr: 'Filtre à carburant', en: 'Fuel filter', nl: 'Brandstoffilter' }, { fr: 'Purge du liquide de refroidissement', en: 'Coolant flush', nl: 'Koelvloeistof verversen' }] },
+  { title: { fr: 'Échappement', en: 'Exhaust', nl: 'Uitlaat' }, items: [{ fr: 'Filtre à particules (FAP)', en: 'Diesel particulate filter (DPF)', nl: 'Roetfilter (DPF)' }, { fr: 'Recharge d’additif FAP', en: 'DPF additive refill', nl: 'Additief roetfilter bijvullen' }, { fr: 'Vanne EGR', en: 'EGR valve', nl: 'EGR-klep' }, { fr: 'Décalaminage', en: 'Decarbonising', nl: 'Ontkoling' }, { fr: 'Silencieux arrière', en: 'Rear silencer', nl: 'Achterdemper' }] },
+  { title: { fr: 'Démarrage & charge', en: 'Starting & charging', nl: 'Starten & laden' }, items: [{ fr: 'Batterie', en: 'Battery', nl: 'Batterij' }, { fr: 'Démarreur', en: 'Starter motor', nl: 'Startmotor' }, { fr: 'Alternateur', en: 'Alternator', nl: 'Dynamo' }] },
+  { title: { fr: 'Suspensions', en: 'Suspension', nl: 'Ophanging' }, items: [{ fr: 'Amortisseurs', en: 'Shock absorbers', nl: 'Schokdempers' }, { fr: 'Triangle / bras de suspension', en: 'Wishbone / control arm', nl: 'Draagarm' }, { fr: 'Rotule de suspension', en: 'Suspension ball joint', nl: 'Fusekogel' }, { fr: 'Biellette de barre stabilisatrice', en: 'Anti-roll bar link', nl: 'Stabilisatorstang' }] },
+  { title: { fr: 'Direction & transmission', en: 'Steering & transmission', nl: 'Stuurinrichting & transmissie' }, items: [{ fr: 'Biellette de direction', en: 'Steering tie rod', nl: 'Stuurstang' }, { fr: 'Rotule de direction', en: 'Steering ball joint', nl: 'Stuurkogel' }, { fr: 'Cardan', en: 'CV joint', nl: 'Aandrijfas' }, { fr: 'Soufflet de cardan', en: 'CV joint boot', nl: 'Aandrijfashoes' }] },
+  { title: { fr: 'Climatisation', en: 'Air conditioning', nl: 'Airco' }, items: [{ fr: 'Filtre d’habitacle', en: 'Cabin filter', nl: 'Interieurfilter' }] },
+  { title: { fr: 'Pneus & roues', en: 'Tyres & wheels', nl: 'Banden & wielen' }, items: [{ fr: 'Roulements de roue', en: 'Wheel bearings', nl: 'Wiellagers' }] },
 ]
 
 const N = CATALOGUE.length
 export const CATALOGUE_COUNT = CATALOGUE.reduce((n, c) => n + c.items.length, 0)
 export const slug = (t) => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 const pad = (n) => String(n).padStart(2, '0')
+const PH = { fr: 'Visuel à venir', en: 'Image coming soon', nl: 'Beeld volgt' }
+const UNIT = { fr: ['prestation', 'prestations'], en: ['service', 'services'], nl: ['dienst', 'diensten'] }
+const countLabel = (n) => `${n} ${tr(UNIT)[n > 1 ? 1 : 0]}`
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v))
 
 export function initPrestations(section, { lenis, reduced }) {
@@ -38,22 +42,22 @@ export function initPrestations(section, { lenis, reduced }) {
   section.querySelector('[data-presta-domains]').textContent = N
 
   deck.innerHTML = CATALOGUE.map((c, i) => `
-    <article class="pcard" id="presta-${slug(c.title)}" data-index="${i}">
+    <article class="pcard" id="presta-${slug(c.title.fr)}" data-index="${i}">
       <div class="pcard__media" aria-hidden="true">
         <span class="pcard__big">${pad(i + 1)}</span>
-        <span class="pcard__ph">Visuel à venir</span>
+        <span class="pcard__ph">${tr(PH)}</span>
         <i class="pcard__sheen"></i>
       </div>
       <div class="pcard__body">
         <header class="pcard__head">
           <span class="pcard__num">${pad(i + 1)}</span>
-          <h3 class="pcard__title">${c.title}</h3>
+          <h3 class="pcard__title">${tr(c.title)}</h3>
           <span class="pcard__count">${pad(c.items.length)}</span>
         </header>
-        <ul class="pcard__list">${c.items.map((it) => `<li>${it}</li>`).join('')}</ul>
+        <ul class="pcard__list">${c.items.map((it) => `<li>${tr(it)}</li>`).join('')}</ul>
       </div>
     </article>`).join('')
-  rail.innerHTML = CATALOGUE.map((c, i) => `<button type="button" class="presta__tick" data-i="${i}" aria-label="${c.title}"><span>${c.title}</span></button>`).join('')
+  rail.innerHTML = CATALOGUE.map((c, i) => `<button type="button" class="presta__tick" data-i="${i}" aria-label="${tr(c.title)}"><span>${tr(c.title)}</span></button>`).join('')
 
   const cards = [...deck.children]
   const ticks = [...rail.children]
@@ -77,15 +81,15 @@ export function initPrestations(section, { lenis, reduced }) {
     swapTl?.kill()
     const els = [curEl, nameEl, countEl]
     if (reduced) {
-      curEl.textContent = pad(i + 1); nameEl.textContent = CATALOGUE[i].title; countEl.textContent = `${CATALOGUE[i].items.length} prestation${CATALOGUE[i].items.length > 1 ? 's' : ''}`
+      curEl.textContent = pad(i + 1); nameEl.textContent = tr(CATALOGUE[i].title); countEl.textContent = countLabel(CATALOGUE[i].items.length)
       return
     }
     swapTl = gsap.timeline()
       .to(els, { yPercent: -60 * dir, opacity: 0, duration: 0.18, ease: 'power2.in', stagger: 0.03 })
       .add(() => {
         curEl.textContent = pad(i + 1)
-        nameEl.textContent = CATALOGUE[i].title
-        countEl.textContent = `${CATALOGUE[i].items.length} prestation${CATALOGUE[i].items.length > 1 ? 's' : ''}`
+        nameEl.textContent = tr(CATALOGUE[i].title)
+        countEl.textContent = countLabel(CATALOGUE[i].items.length)
       })
       .fromTo(els, { yPercent: 60 * dir, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.5, ease: 'power3.out', stagger: 0.05 })
   }
@@ -122,9 +126,25 @@ export function initPrestations(section, { lenis, reduced }) {
   }
   layout(0)
 
+
+  const setLang = () => {
+    cards.forEach((card, i) => {
+      const c = CATALOGUE[i]
+      card.querySelector('.pcard__ph').textContent = tr(PH)
+      card.querySelector('.pcard__title').textContent = tr(c.title)
+      card.querySelectorAll('.pcard__list li').forEach((li, k) => { li.textContent = tr(c.items[k]) })
+      ticks[i].setAttribute('aria-label', tr(c.title))
+      ticks[i].querySelector('span').textContent = tr(c.title)
+    })
+    if (active >= 0) {
+      nameEl.textContent = tr(CATALOGUE[active].title)
+      countEl.textContent = countLabel(CATALOGUE[active].items.length)
+    }
+  }
+
   if (reduced) {
     section.classList.add('presta--static')
-    return { scrollToIndex, indexOf: (id) => cards.findIndex((c) => c.id === id) }
+    return { scrollToIndex, setLang, indexOf: (id) => cards.findIndex((c) => c.id === id) }
   }
 
   // Progression 0 → 12 liée au défilement de la section (lissée), mise en page à chaque image
@@ -150,5 +170,5 @@ export function initPrestations(section, { lenis, reduced }) {
     tiltX(-vel * 9); tiltZ(vel * 1.5)
   })
 
-  return { scrollToIndex, indexOf: (id) => cards.findIndex((c) => c.id === id) }
+  return { scrollToIndex, setLang, indexOf: (id) => cards.findIndex((c) => c.id === id) }
 }

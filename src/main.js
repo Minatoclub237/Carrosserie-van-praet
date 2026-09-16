@@ -5,13 +5,20 @@ import './style.css'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
+import { captureOriginals, applyTexts, getLang, setLang, tr } from './i18n.js'
 import { renderBrands } from './brands.js'
 import { initFaq } from './faq.js'
 import { initPrestations } from './prestations.js'
 import { initGoogleReviews } from './google-reviews.js'
 
 gsap.registerPlugin(ScrollTrigger)
+// Mobile : la barre d'adresse qui se replie ne doit pas recalculer (et faire sauter) les animations
+ScrollTrigger.config({ ignoreMobileResize: true })
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+/* ---------- Langue : textes d'origine mémorisés, puis langue enregistrée appliquée avant tout rendu ---------- */
+captureOriginals()
+if (getLang() !== 'fr') applyTexts()
 
 /* ---------- Défilement fluide (scroll natif conservé, barre visible) ---------- */
 const lenis = reduced ? null : new Lenis({ lerp: 0.09, smoothWheel: true })
@@ -40,12 +47,18 @@ video.play().catch(() => {})
 document.addEventListener('visibilitychange', () => { if (!document.hidden) video.play().catch(() => {}) })
 
 /* ---------- Statut d'ouverture en direct (heure de Bruxelles) ---------- */
-{
+const STATUS = {
+  fr: { open: (h) => `Ouvert · jusqu’à ${h}:00`, closed: (w, h) => `Fermé · ouvre ${w} à ${h}:00`, today: 'aujourd’hui', tomorrow: 'demain', days: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'] },
+  en: { open: (h) => `Open · until ${h}:00`, closed: (w, h) => `Closed · opens ${w} at ${h}:00`, today: 'today', tomorrow: 'tomorrow', days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] },
+  nl: { open: (h) => `Open · tot ${h}:00`, closed: (w, h) => `Gesloten · opent ${w} om ${h}:00`, today: 'vandaag', tomorrow: 'morgen', days: ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'] },
+}
+const updateStatus = (() => {
   const HOURS = { 1: [9, 18], 2: [9, 18], 3: [9, 18], 4: [9, 18], 5: [9, 18], 6: [9, 14] } // dimanche fermé
-  const DAYS = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi']
   const card = document.querySelector('.hero-call')
   const label = card?.querySelector('[data-open-status]')
   const update = () => {
+    if (!card) return
+    const S = tr(STATUS)
     const parts = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Brussels', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false })
       .formatToParts(new Date()).map((p) => [p.type, p.value]))
     const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(parts.weekday)
@@ -53,20 +66,22 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) vide
     const today = HOURS[day]
     const open = today && now >= today[0] && now < today[1]
     let text
-    if (open) text = `Ouvert · jusqu’à ${today[1]}:00`
+    if (open) text = S.open(today[1])
     else {
       // prochaine ouverture : plus tard aujourd'hui ou jour suivant
       let d = day, first = true
       while (!(HOURS[d] && (!first || now < HOURS[d][0]))) { d = (d + 1) % 7; first = false }
-      const when = d === day ? 'aujourd’hui' : d === (day + 1) % 7 ? 'demain' : DAYS[d]
-      text = `Fermé · ouvre ${when} à ${HOURS[d][0]}:00`
+      const when = d === day ? S.today : d === (day + 1) % 7 ? S.tomorrow : S.days[d]
+      text = S.closed(when, HOURS[d][0])
     }
     label.textContent = text
     card.classList.toggle('is-open', !!open)
     card.classList.toggle('is-closed', !open)
   }
-  if (card) { update(); setInterval(update, 60000) }
-}
+  update()
+  setInterval(update, 60000)
+  return update
+})()
 
 /* ---------- Nav : largeur pleine au repos, recadrée sur la grille dès qu'on défile ---------- */
 const nav = document.getElementById('nav')
@@ -94,9 +109,14 @@ document.querySelectorAll('[data-dialog]').forEach((btn) => {
 const presta = initPrestations(document.getElementById('prestations'), { lenis, reduced })
 
 /* ---------- Avis Google en boucle ---------- */
-initGoogleReviews(document.getElementById('avis-google'), { lenis, reduced })
+const greviews = initGoogleReviews(document.getElementById('avis-google'), { lenis, reduced })
 
-/* ---------- Formulaire de devis → e-mail pré-rempli ---------- */
+/* ---------- Formulaire de devis → e-mail pré-rempli dans la langue du visiteur ---------- */
+const MAIL_TEXT = {
+  fr: { subject: 'Demande de devis', hello: 'Bonjour,', ask: 'Je souhaite recevoir un devis gratuit.', name: 'Nom', phone: 'Téléphone', email: 'E-mail', make: 'Marque', model: 'Modèle', year: 'Année', work: 'Intervention', msg: 'Message', photos: '(Photos des dégâts en pièce jointe)' },
+  en: { subject: 'Quote request', hello: 'Hello,', ask: 'I would like to receive a free quote.', name: 'Name', phone: 'Phone', email: 'E-mail', make: 'Make', model: 'Model', year: 'Year', work: 'Type of work', msg: 'Message', photos: '(Photos of the damage attached)' },
+  nl: { subject: 'Offerteaanvraag', hello: 'Goedendag,', ask: 'Ik ontvang graag een gratis offerte.', name: 'Naam', phone: 'Telefoon', email: 'E-mail', make: 'Merk', model: 'Model', year: 'Bouwjaar', work: 'Herstelling', msg: 'Bericht', photos: '(Foto’s van de schade in bijlage)' },
+}
 {
   const form = document.getElementById('quote-form')
   const brand = form.elements.marque
@@ -114,20 +134,21 @@ initGoogleReviews(document.getElementById('avis-google'), { lenis, reduced })
     required.forEach((el) => el.classList.toggle('is-invalid', bad.includes(el)))
     err.hidden = !bad.length
     if (bad.length) return bad[0].focus()
+    const M = tr(MAIL_TEXT)
     const v = (n) => form.elements[n].value.trim() || '—'
-    const subject = `Demande de devis — ${v('marque')} ${form.elements.modele.value.trim()}`.trim()
+    const subject = `${M.subject} — ${v('marque')} ${form.elements.modele.value.trim()}`.trim()
     const body = [
-      'Bonjour,', '', 'Je souhaite recevoir un devis gratuit.', '',
-      `Nom : ${v('nom')}`, `Téléphone : ${v('telephone')}`, `E-mail : ${v('email')}`, '',
-      `Marque : ${v('marque')}`, `Modèle : ${v('modele')}`, `Année : ${v('annee')}`, `Intervention : ${v('intervention')}`, '',
-      'Message :', v('message'), '', '(Photos des dégâts en pièce jointe)',
+      M.hello, '', M.ask, '',
+      `${M.name} : ${v('nom')}`, `${M.phone} : ${v('telephone')}`, `${M.email} : ${v('email')}`, '',
+      `${M.make} : ${v('marque')}`, `${M.model} : ${v('modele')}`, `${M.year} : ${v('annee')}`, `${M.work} : ${v('intervention')}`, '',
+      `${M.msg} :`, v('message'), '', M.photos,
     ].join('\n')
     window.location.href = `mailto:carrosserievanpraet@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
   })
 }
 
 /* ---------- FAQ ---------- */
-initFaq(document.getElementById('faq'), { reduced })
+const faq = initFaq(document.getElementById('faq'), { reduced })
 
 /* ---------- Découpes ---------- */
 // Mots masqués (conserve <br> et espaces insécables)
@@ -186,6 +207,15 @@ function splitChars(el) {
   return chars
 }
 
+// Textes découpés mais non traduits : restaurés avant chaque nouvelle découpe
+const untranslatedSources = new Map()
+const fresh = (el) => {
+  if (el.hasAttribute('data-i18n')) return el
+  if (untranslatedSources.has(el)) el.innerHTML = untranslatedSources.get(el)
+  else untranslatedSources.set(el, el.innerHTML)
+  return el
+}
+
 /* ---------- Fil de fer 3D : Three.js chargé à l'approche de la section ---------- */
 const arts = document.querySelectorAll('.ind-card__art')
 const wireIO = new IntersectionObserver(([entry]) => {
@@ -195,17 +225,76 @@ const wireIO = new IntersectionObserver(([entry]) => {
 }, { rootMargin: '150% 0px' })
 wireIO.observe(document.querySelector('.industries'))
 
+/* ---------- Bandeau cinétique (installé une fois, recloné à chaque changement de langue) ---------- */
+const kineticRows = gsap.utils.toArray('.kinetic__row').map((row) => ({ row, track: row.querySelector('.kinetic__track'), dir: +row.dataset.dir, x: 0 }))
+const cloneKinetic = () => kineticRows.forEach(({ row, track }) => {
+  ;[...row.children].slice(1).forEach((c) => c.remove())
+  row.append(track.cloneNode(true), track.cloneNode(true))
+})
+cloneKinetic()
 if (!reduced) {
+  let kineticOn = false, scrollDir = 1
+  new IntersectionObserver(([e]) => { kineticOn = e.isIntersecting }).observe(document.querySelector('.kinetic'))
+  const skewTo = kineticRows.map(({ row }) => gsap.quickTo(row, 'skewX', { duration: 0.5, ease: 'power3.out' }))
+  gsap.ticker.add((_, dt) => {
+    if (!kineticOn) return
+    const v = lenis ? lenis.velocity : 0
+    if (Math.abs(v) > 0.1) scrollDir = Math.sign(v)
+    const speed = (0.9 + Math.min(Math.abs(v), 60) * 0.55) * (dt / 16.7)
+    kineticRows.forEach((r, i) => {
+      const w = r.track.offsetWidth
+      r.x = gsap.utils.wrap(-w, 0, r.x - speed * r.dir * scrollDir)
+      gsap.set(r.row, { x: r.x })
+      skewTo[i](gsap.utils.clamp(-12, 12, -v * 0.35 * r.dir))
+    })
+  })
+}
+
+/* ---------- Avis Fixico : carte active (survol sur ordinateur, centre de l'écran partout) ---------- */
+const reviewCards = gsap.utils.toArray('.review')
+if (!reduced) {
+  const rail = document.querySelector('.reviews__rail')
+  let hovered = null
+  const setActive = (active) => reviewCards.forEach((c) => c.classList.toggle('is-active', c === active))
+  const activateCentered = () => {
+    if (hovered) return
+    const mid = window.innerWidth / 2
+    let best = null, bestD = Infinity
+    reviewCards.forEach((c) => {
+      const r = c.getBoundingClientRect()
+      const d = Math.abs(r.left + r.width / 2 - mid)
+      if (d < bestD) { bestD = d, best = c }
+    })
+    // Seuil lié à la largeur de carte : toujours une carte active quand le rail est à l'écran
+    setActive(best && bestD < Math.max(window.innerWidth * 0.3, best.offsetWidth * 0.62) ? best : null)
+  }
+  ScrollTrigger.create({ trigger: '.reviews', start: 'top top', end: 'bottom bottom', onUpdate: activateCentered, onLeave: () => setActive(null), onLeaveBack: () => setActive(null) })
+  if (window.matchMedia('(hover: hover)').matches) {
+    reviewCards.forEach((c) => {
+      c.addEventListener('mouseenter', () => { hovered = c; setActive(c) })
+      c.addEventListener('mouseleave', () => { hovered = null; activateCentered() })
+    })
+    rail.addEventListener('mouseleave', () => { hovered = null; activateCentered() })
+  }
+}
+
+/* =====================================================================
+   ANIMATIONS AU DÉFILEMENT — construites dans un contexte GSAP réversible,
+   reconstruites à l'identique après un changement de langue
+   ===================================================================== */
+function buildMotion({ intro }) {
   const scrub = 0.6
 
   /* ================= HERO ================= */
-  const heroChars = gsap.utils.toArray('.hero__title [data-chars]').flatMap(splitChars)
-  // Arrivée : titre ligne par ligne, puis informations, actions et badges d'avis
-  gsap.fromTo('.hero__title .mask__line', { yPercent: 115 }, { yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: 0.09, delay: 0.15 })
-  gsap.fromTo('.hero__sub .mask__line', { yPercent: 115 }, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.09, delay: 0.5 })
-  gsap.fromTo('.hero__eyebrow', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.7 })
-  gsap.fromTo(['.hero-btn', '.hero-call'], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.85 })
-  gsap.fromTo('.hero-badge', { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.9 })
+  const heroChars = gsap.utils.toArray('.hero__title [data-chars]').flatMap((el) => splitChars(fresh(el)))
+  if (intro) {
+    // Arrivée : titre ligne par ligne, puis informations, actions et badges d'avis
+    gsap.fromTo('.hero__title .mask__line', { yPercent: 115 }, { yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: 0.09, delay: 0.15 })
+    gsap.fromTo('.hero__sub .mask__line', { yPercent: 115 }, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.09, delay: 0.5 })
+    gsap.fromTo('.hero__eyebrow', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.7 })
+    gsap.fromTo(['.hero-btn', '.hero-call'], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.85 })
+    gsap.fromTo('.hero-badge', { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.9 })
+  }
 
   // Séquence au défilement : le titre se disperse, les chiffres montent et comptent
   const nums = gsap.utils.toArray('.hero-num')
@@ -227,21 +316,21 @@ if (!reduced) {
   /* ================= TEXTES ================= */
   // Mots qui montent (réversible)
   gsap.utils.toArray('[data-scroll-text]').forEach((el) => {
-    gsap.fromTo(splitWords(el), { yPercent: 118 }, {
+    gsap.fromTo(splitWords(fresh(el)), { yPercent: 118 }, {
       yPercent: 0, ease: 'power2.out', stagger: 0.08,
       scrollTrigger: { trigger: el, start: 'top 94%', end: 'top 60%', scrub },
     })
   })
   // Lecture : les mots s'allument un à un
   gsap.utils.toArray('[data-scroll-read]').forEach((el) => {
-    gsap.fromTo(splitWords(el), { opacity: 0.12, yPercent: 30 }, {
+    gsap.fromTo(splitWords(fresh(el)), { opacity: 0.12, yPercent: 30 }, {
       opacity: 1, yPercent: 0, ease: 'none', stagger: 0.05,
       scrollTrigger: { trigger: el, start: 'top 85%', end: 'bottom 55%', scrub },
     })
   })
   // Titres : les lettres basculent en 3D
   gsap.utils.toArray('[data-flip]').forEach((el) => {
-    gsap.fromTo(splitChars(el), { rotateX: -100, yPercent: 40, opacity: 0 }, {
+    gsap.fromTo(splitChars(fresh(el)), { rotateX: -100, yPercent: 40, opacity: 0 }, {
       rotateX: 0, yPercent: 0, opacity: 1, ease: 'power3.out', stagger: 0.025,
       scrollTrigger: { trigger: el, start: 'top 92%', end: 'top 52%', scrub },
     })
@@ -252,7 +341,7 @@ if (!reduced) {
     scrollTrigger: { trigger: '.quote__box', start: 'top bottom', end: 'top 30%', scrub },
   })
   // Nom géant du pied de page : les lettres remontent du sol
-  gsap.fromTo(splitChars(document.querySelector('[data-footer-mark]')), { yPercent: 105, opacity: 0 }, {
+  gsap.fromTo(splitChars(fresh(document.querySelector('[data-footer-mark]'))), { yPercent: 105, opacity: 0 }, {
     yPercent: 0, opacity: 1, ease: 'power3.out', stagger: 0.03,
     scrollTrigger: { trigger: '.footer', start: 'top 95%', end: 'bottom bottom', scrub },
   })
@@ -278,7 +367,8 @@ if (!reduced) {
   })
   // Fondu enchaîné des photos, piloté par l'arrivée de chaque carte
   const imgs = gsap.utils.toArray('.panels__img')
-  gsap.utils.toArray('.panel-card').forEach((card, i) => {
+  const panelCards = gsap.utils.toArray('.panel-card')
+  panelCards.forEach((card, i) => {
     if (i === 0) return
     gsap.fromTo(imgs[i], { opacity: 0 }, {
       opacity: 1, ease: 'none',
@@ -287,36 +377,13 @@ if (!reduced) {
   })
   // Chaque photo zoome lentement pendant qu'elle est à l'écran (effet Ken Burns lié au défilement)
   imgs.forEach((fig, i) => {
-    const cards = gsap.utils.toArray('.panel-card')
     gsap.fromTo(fig.querySelector('img'), { scale: 1.14, xPercent: 2 }, {
       scale: 1, xPercent: 0, ease: 'none',
-      scrollTrigger: { trigger: cards[i], start: 'top 90%', endTrigger: cards[i + 1] || '.panels__hold', end: 'top 20%', scrub: true },
+      scrollTrigger: { trigger: panelCards[i], start: 'top 90%', endTrigger: panelCards[i + 1] || '.panels__hold', end: 'top 20%', scrub: true },
     })
     gsap.fromTo(fig.querySelector('.panels__cap'), { y: 30, opacity: 0 }, {
       y: 0, opacity: 1, ease: 'power2.out',
-      scrollTrigger: { trigger: cards[i], start: 'top 60%', end: 'top 35%', scrub: true },
-    })
-  })
-
-  /* ================= BANDEAU CINÉTIQUE ================= */
-  const rows = gsap.utils.toArray('.kinetic__row').map((row) => {
-    const track = row.querySelector('.kinetic__track')
-    row.append(track.cloneNode(true), track.cloneNode(true))
-    return { row, track, dir: +row.dataset.dir, x: 0 }
-  })
-  let kineticOn = false, scrollDir = 1
-  new IntersectionObserver(([e]) => { kineticOn = e.isIntersecting }).observe(document.querySelector('.kinetic'))
-  const skewTo = rows.map(({ row }) => gsap.quickTo(row, 'skewX', { duration: 0.5, ease: 'power3.out' }))
-  gsap.ticker.add((_, dt) => {
-    if (!kineticOn) return
-    const v = lenis ? lenis.velocity : 0
-    if (Math.abs(v) > 0.1) scrollDir = Math.sign(v)
-    const speed = (0.9 + Math.min(Math.abs(v), 60) * 0.55) * (dt / 16.7)
-    rows.forEach((r, i) => {
-      const w = r.track.offsetWidth
-      r.x = gsap.utils.wrap(-w, 0, r.x - speed * r.dir * scrollDir)
-      gsap.set(r.row, { x: r.x })
-      skewTo[i](gsap.utils.clamp(-12, 12, -v * 0.35 * r.dir))
+      scrollTrigger: { trigger: panelCards[i], start: 'top 60%', end: 'top 35%', scrub: true },
     })
   })
 
@@ -341,17 +408,20 @@ if (!reduced) {
   })
 
   /* ================= ÉTAPES ================= */
-  const steps = gsap.utils.toArray('.step').map((step) => splitWords(step))
+  const stepEls = gsap.utils.toArray('.step')
+  const steps = stepEls.map((step) => [...splitWords(fresh(step.querySelector('.step__title'))), ...splitWords(fresh(step.querySelector('.step__text')))])
   const counter = document.querySelector('.process__current')
   gsap.set(steps.flat(), { yPercent: 115 })
   const ptl = gsap.timeline({
     defaults: { ease: 'power3.inOut' },
-    scrollTrigger: {
-      trigger: '.process', start: 'top 65%', end: 'bottom bottom', scrub,
-      onUpdate: (self) => {
-        const n = Math.min(4, Math.max(1, Math.floor(ptl.time() - 0.5) + 1))
-        counter.textContent = `0${n}`
-      },
+    scrollTrigger: { trigger: '.process', start: 'top 65%', end: 'bottom bottom', scrub },
+    // L'étape affichée (et son CTA) suit la progression de la scène
+    onUpdate: () => {
+      const t = ptl.time()
+      const n = Math.min(4, Math.max(1, Math.floor(t - 0.5) + 1))
+      counter.textContent = `0${n}`
+      const active = ptl.progress() <= 0.002 ? -1 : t < 1.5 ? 0 : Math.min(3, Math.floor(t - 0.5))
+      stepEls.forEach((s, k) => s.classList.toggle('is-active', k === active))
     },
   })
   ptl.to(steps[0], { yPercent: 0, stagger: 0.02, duration: 0.5 }, 0)
@@ -372,52 +442,65 @@ if (!reduced) {
     ease: 'none',
     scrollTrigger: { trigger: '.reviews', start: 'top top', end: 'bottom bottom', scrub: true, invalidateOnRefresh: true },
   })
-  const reviewCards = gsap.utils.toArray('.review')
   reviewCards.forEach((card) => {
     // Entrée liée au défilement : la carte arrive inclinée et basse, se redresse en glissant
     gsap.fromTo(card, { rotate: 5, y: 90 }, {
       rotate: 0, y: 0, ease: 'none',
       scrollTrigger: { trigger: card, containerAnimation: hScroll, start: 'left 100%', end: 'left 58%', scrub },
     })
-    gsap.fromTo(splitWords(card.querySelector('blockquote')), { yPercent: 115 }, {
+    gsap.fromTo(splitWords(fresh(card.querySelector('blockquote'))), { yPercent: 115 }, {
       yPercent: 0, ease: 'power2.out', stagger: 0.04,
       scrollTrigger: { trigger: card, containerAnimation: hScroll, start: 'left 94%', end: 'left 55%', scrub },
     })
   })
-
-  // Carte active = survolée (ordinateur) ; sinon celle qui passe au centre de l'écran (ordinateur et mobile)
-  const rail = document.querySelector('.reviews__rail')
-  const canHover = window.matchMedia('(hover: hover)').matches
-  let hovered = null
-  const setActive = (active) => reviewCards.forEach((c) => c.classList.toggle('is-active', c === active))
-  const activateCentered = () => {
-    if (hovered) return
-    const mid = window.innerWidth / 2
-    let best = null, bestD = Infinity
-    reviewCards.forEach((c) => {
-      const r = c.getBoundingClientRect()
-      const d = Math.abs(r.left + r.width / 2 - mid)
-      if (d < bestD) { bestD = d, best = c }
-    })
-    // Seuil lié à la largeur de carte : toujours une carte active quand le rail est à l'écran
-    setActive(best && bestD < Math.max(window.innerWidth * 0.3, best.offsetWidth * 0.62) ? best : null)
-  }
-  ScrollTrigger.create({ trigger: '.reviews', start: 'top top', end: 'bottom bottom', onUpdate: activateCentered, onLeave: () => setActive(null), onLeaveBack: () => setActive(null) })
-  if (canHover) {
-    reviewCards.forEach((c) => {
-      c.addEventListener('mouseenter', () => { hovered = c; setActive(c) })
-      c.addEventListener('mouseleave', () => { hovered = null; activateCentered() })
-    })
-    rail.addEventListener('mouseleave', () => { hovered = null; activateCentered() })
-  }
   const score = document.querySelector('.reviews__num')
   const scoreObj = { v: 0 }
   gsap.to(scoreObj, {
     v: +score.dataset.to, ease: 'power2.out',
-    onUpdate: () => { score.textContent = scoreObj.v.toFixed(1).replace('.', ',') },
+    onUpdate: () => { score.textContent = scoreObj.v.toFixed(1).replace('.', getLang() === 'en' ? '.' : ',') },
     scrollTrigger: { trigger: '.reviews', start: 'top 85%', end: 'top 10%', scrub },
   })
 }
+
+let motion = reduced ? null : gsap.context(() => buildMotion({ intro: true }))
+
+/* ---------- Sélecteur de langue : bascule instantanée, animations reconstruites sur place ---------- */
+const switcher = document.querySelector('[data-lang-switch]')
+const syncSwitch = () => {
+  switcher.querySelector('[data-lang-current]').textContent = getLang().toUpperCase()
+  switcher.querySelectorAll('.lang__opt').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === getLang())))
+}
+const closeMenu = () => { switcher.classList.remove('is-open'); switcher.querySelector('.lang__current').setAttribute('aria-expanded', 'false') }
+function changeLanguage(next) {
+  if (next === getLang() || !setLang(next)) return
+  motion?.revert() // remet chaque élément animé dans son état d'origine
+  applyTexts() // textes non découpés, dans la nouvelle langue
+  cloneKinetic()
+  faq.setLang()
+  presta.setLang()
+  greviews.setLang()
+  updateStatus()
+  if (!reduced) motion = gsap.context(() => buildMotion({ intro: false }))
+  ScrollTrigger.refresh()
+  // Les animations liées au défilement rejoignent immédiatement la position courante
+  ScrollTrigger.getAll().forEach((st) => {
+    const tween = typeof st.getTween === 'function' ? st.getTween() : null
+    if (tween && typeof tween.progress === 'function') tween.progress(1)
+  })
+  syncSwitch()
+}
+syncSwitch()
+switcher.addEventListener('click', (e) => {
+  const opt = e.target.closest('.lang__opt')
+  if (opt) { changeLanguage(opt.dataset.lang); closeMenu(); return }
+  if (e.target.closest('.lang__current')) {
+    const open = !switcher.classList.contains('is-open')
+    switcher.classList.toggle('is-open', open)
+    switcher.querySelector('.lang__current').setAttribute('aria-expanded', String(open))
+  }
+})
+document.addEventListener('click', (e) => { if (!switcher.contains(e.target)) closeMenu() })
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu() })
 
 window.addEventListener('load', () => ScrollTrigger.refresh())
 
