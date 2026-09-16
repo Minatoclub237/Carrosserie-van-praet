@@ -78,16 +78,13 @@ img, video, canvas, svg { display: block; }
   background: var(--paper); color: var(--ink);
 }
 .nav__bar { position: relative; }
-/* Logo : onglet blanc qui déborde sous la barre (~135 % de sa hauteur) pour rester bien lisible */
+/* Logo : contenu dans la hauteur de la barre */
 .nav__logo {
-  justify-self: start; align-self: start; display: flex; align-items: center;
-  height: max(60px, 5.1vw); margin-left: -1.1vw; padding: .45vw 1.1vw .55vw;
-  background: var(--paper); border-radius: 0 0 14px 14px;
-  box-shadow: 0 14px 26px -18px rgba(0,0,0,.55);
-  transition: transform .5s var(--ease);
+  justify-self: start; display: flex; align-items: center;
 }
-.nav__logo:hover { transform: translateY(2px); }
-.nav__logo-img { display: block; height: 100%; width: auto; }
+.nav__logo:hover { opacity: .85; }
+/* Hauteur de la barre (max(44px, 3.76vw)) moins 5 px en haut et en bas */
+.nav__logo-img { display: block; height: calc(max(44px, 3.76vw) - 10px); width: auto; }
 .nav__links { display: flex; gap: 2.2vw; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
 .nav__links a { position: relative; }
 .nav__links a::after { content: ''; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease); }
@@ -243,6 +240,8 @@ img, video, canvas, svg { display: block; }
 .footer__col li { font-size: 16px; line-height: 1.5; color: #cfcfc8; }
 .footer__col a { transition: color .25s; }
 .footer__col a:hover { color: #fff; }
+.footer__logo-link { display: inline-block; transition: opacity .3s; }
+.footer__logo-link:hover { opacity: .85; }
 .footer__logo { display: block; width: min(100%, 17vw); min-width: 200px; height: auto; margin: -.4vw 0 1.4vw -.4vw; }
 .footer__pitch { max-width: 24vw; min-width: 240px; font-size: 16px; line-height: 1.5; color: #a9a9a2; }
 .footer__langs { margin-top: 1.4vw; color: #7d7d76; }
@@ -377,7 +376,7 @@ img, video, canvas, svg { display: block; }
   :root { --pad: 20px; --nav-inset: 12px; --display: 7.4vw; --nav-top: 10px; }
   .nav__links { display: none; }
   .nav__bar { grid-template-columns: minmax(0, 1fr) auto; padding-inline: 10px 6px; }
-  .nav__logo { height: 58px; margin-left: -10px; padding: 6px 10px 7px; border-radius: 0 0 12px 12px; }
+  .nav__logo-img { height: 36px; }
   .nav__quote { padding-inline: 8px; letter-spacing: .02em; }
   .footer { overflow-x: clip; }
   .hero__content { bottom: 28px; }
