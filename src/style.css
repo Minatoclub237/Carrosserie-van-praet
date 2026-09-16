@@ -127,7 +127,15 @@ img, video, canvas, svg { display: block; }
 .expertise__intro { padding: 6.3vw 0 7.2vw; }
 .expertise__intro .label { margin-bottom: 2vw; color: #d9d9d3; }
 .expertise__text { max-width: 74vw; font-size: 3vw; font-weight: 300; line-height: 1.18; letter-spacing: -.025em; }
-.capabilities { padding: 11.8vw 0 6.1vw; }
+/* Bande des marques : pleine largeur, blanche, une ligne, boucle infinie */
+.brands { margin: 5.5vw calc(-1 * var(--pad)) 0; padding-block: max(18px, 1.5vw); background: var(--paper); overflow: hidden; }
+.brands__track { display: flex; width: max-content; animation: brands-loop 45s linear infinite; will-change: transform; }
+.brands__set { display: flex; align-items: center; gap: max(44px, 4.6vw); padding-right: max(44px, 4.6vw); list-style: none; }
+.brand { flex: none; display: grid; place-items: center; }
+.brand svg { display: block; width: auto; height: clamp(28px, 2.7vw, 46px); }
+@keyframes brands-loop { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+@media (hover: hover) { .brands:hover .brands__track { animation-play-state: paused; } }
+.capabilities { padding: 7vw 0 6.1vw; }
 .capabilities .label { margin-bottom: 1.7vw; color: #d9d9d3; }
 .capabilities__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.57vw; }
 .cap-card {
@@ -313,6 +321,9 @@ img, video, canvas, svg { display: block; }
   .expertise__text { max-width: none; font-size: 6.2vw; }
   .capabilities__grid, .industries__grid { grid-template-columns: 1fr 1fr; gap: 10px; }
   .cap-card { min-height: 220px; padding: 14px; }
+  .brands { margin-top: 40px; }
+  .brands__track { animation-duration: 30s; }
+  .capabilities { padding-top: 48px; }
   .cap-card__icon { top: 14px; left: 14px; width: 40px; height: 40px; }
   .cap-card__title, .ind-card__title { font-size: 17px; }
   .outline-btn { margin-top: 20px; }

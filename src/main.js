@@ -6,6 +6,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { MAP_W, MAP_H, PIN, MAJOR, MINOR, RAIL, PARK } from './streets.js'
+import { renderBrands } from './brands.js'
 
 gsap.registerPlugin(ScrollTrigger)
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -37,6 +38,9 @@ const nav = document.getElementById('nav')
 const setNav = (y) => nav.classList.toggle('is-scrolled', y > 8)
 setNav(window.scrollY)
 lenis ? lenis.on('scroll', ({ scroll }) => setNav(scroll)) : window.addEventListener('scroll', () => setNav(window.scrollY), { passive: true })
+
+/* ---------- Bande des marques ---------- */
+renderBrands(document.querySelector('.brands__track'))
 
 /* ---------- Horaires : jour courant à Bruxelles ---------- */
 const today = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
