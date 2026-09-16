@@ -35,7 +35,6 @@ export function initGoogleReviews(section, { lenis, reduced }) {
   const track = section.querySelector('.greviews__track')
   const view = section.querySelector('.greviews__viewport')
   section.querySelector('.greviews__g').innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${siGoogle.path}" fill="#${siGoogle.hex}"/></svg>`
-  section.querySelector('[data-greviews-count]').textContent = REVIEWS.length
 
   // Deux jeux identiques : la boucle se referme sans raccord visible
   track.innerHTML = REVIEWS.map((r, i) => cell(r, i, false)).join('') + REVIEWS.map((r, i) => cell(r, i, true)).join('')

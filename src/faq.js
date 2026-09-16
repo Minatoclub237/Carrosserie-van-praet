@@ -65,7 +65,7 @@ const FAQS = {
       a: 'Oui, avec deux formules : vidange avec filtre à huile, ou vidange avec 3 filtres. Freins, bougies, filtres à air et à carburant, courroies et amortisseurs se changent aussi sur place.',
       cta: { label: 'Voir la révision & vidange', href: '#presta-revision-vidange' } },
     { q: 'Puis-je déposer ma voiture le samedi ?',
-      a: 'Oui, l’atelier est ouvert le samedi de 9:00 à 13:30, et du lundi au vendredi de 9:00 à 18:00. Il est fermé le dimanche.',
+      a: 'Oui, l’atelier est ouvert le samedi de 9:00 à 14:00, et du lundi au vendredi de 9:00 à 18:00. Il est fermé le dimanche.',
       cta: { label: 'Itinéraire vers la rue Navez 103', href: MAPS, external: true } },
     { q: 'Est-ce que je peux être servi en néerlandais ?',
       a: 'Oui, l’accueil se fait en français et en néerlandais. Ja, u wordt ook in het Nederlands geholpen.',
