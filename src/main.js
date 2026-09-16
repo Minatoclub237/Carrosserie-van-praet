@@ -264,16 +264,44 @@ if (!reduced) {
     ease: 'none',
     scrollTrigger: { trigger: '.reviews', start: 'top top', end: 'bottom bottom', scrub: true, invalidateOnRefresh: true },
   })
-  gsap.utils.toArray('.review').forEach((card) => {
+  const reviewCards = gsap.utils.toArray('.review')
+  reviewCards.forEach((card) => {
+    // Entrée liée au défilement : la carte arrive inclinée et basse, se redresse en glissant
+    gsap.fromTo(card, { rotate: 5, y: 90 }, {
+      rotate: 0, y: 0, ease: 'none',
+      scrollTrigger: { trigger: card, containerAnimation: hScroll, start: 'left 100%', end: 'left 58%', scrub },
+    })
     gsap.fromTo(splitWords(card.querySelector('blockquote')), { yPercent: 115 }, {
       yPercent: 0, ease: 'power2.out', stagger: 0.04,
-      scrollTrigger: { trigger: card, containerAnimation: hScroll, start: 'left 96%', end: 'left 60%', scrub },
-    })
-    gsap.fromTo(card, { rotate: 4, y: 60 }, {
-      rotate: 0, y: 0, ease: 'none',
-      scrollTrigger: { trigger: card, containerAnimation: hScroll, start: 'left 100%', end: 'left 55%', scrub },
+      scrollTrigger: { trigger: card, containerAnimation: hScroll, start: 'left 94%', end: 'left 55%', scrub },
     })
   })
+
+  // Carte active = survolée (ordinateur) ; sinon celle qui passe au centre de l'écran (ordinateur et mobile)
+  const rail = document.querySelector('.reviews__rail')
+  const canHover = window.matchMedia('(hover: hover)').matches
+  let hovered = null
+  const setActive = (active) => reviewCards.forEach((c) => c.classList.toggle('is-active', c === active))
+  const activateCentered = () => {
+    if (hovered) return
+    const mid = window.innerWidth / 2
+    let best = null, bestD = Infinity
+    reviewCards.forEach((c) => {
+      const r = c.getBoundingClientRect()
+      const d = Math.abs(r.left + r.width / 2 - mid)
+      if (d < bestD) { bestD = d, best = c }
+    })
+    // Seuil lié à la largeur de carte : toujours une carte active quand le rail est à l'écran
+    setActive(best && bestD < Math.max(window.innerWidth * 0.3, best.offsetWidth * 0.62) ? best : null)
+  }
+  ScrollTrigger.create({ trigger: '.reviews', start: 'top top', end: 'bottom bottom', onUpdate: activateCentered, onLeave: () => setActive(null), onLeaveBack: () => setActive(null) })
+  if (canHover) {
+    reviewCards.forEach((c) => {
+      c.addEventListener('mouseenter', () => { hovered = c; setActive(c) })
+      c.addEventListener('mouseleave', () => { hovered = null; activateCentered() })
+    })
+    rail.addEventListener('mouseleave', () => { hovered = null; activateCentered() })
+  }
   const score = document.querySelector('.reviews__num')
   const scoreObj = { v: 0 }
   gsap.to(scoreObj, {

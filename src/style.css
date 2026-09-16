@@ -8,6 +8,9 @@
   --line: #3a3a35;
   --muted: #9a9a92;
   --red: #f0302b;
+  --blue: #2e6cff;       /* accent des titres bicolores */
+  --blue-deep: #1238d6;
+  --cyan: #19c3ff;
   --pad: 5.49vw;           /* 35 px vidéo */
   --nav-top: 0.63vw;
   --nav-inset: 3.45vw;     /* au repos, 22 px vidéo */
@@ -270,7 +273,7 @@ img, video, canvas, svg { display: block; }
 .kinetic__track { display: flex; align-items: center; gap: 2.2vw; padding-right: 2.2vw; flex-shrink: 0;
   font-family: var(--futur); font-size: 6vw; font-weight: 400; line-height: 1.15; letter-spacing: .01em; text-transform: uppercase; }
 .kinetic__track i { font-style: normal; font-size: .38em; color: var(--red); }
-.kinetic__track .is-outline { color: transparent; -webkit-text-stroke: 1.2px #8c8c84; }
+.kinetic__track .is-outline { color: transparent; -webkit-text-stroke: 1.4px var(--blue); }
 
 /* ---------------- ÉTAPES (scène épinglée) ---------------- */
 .process { position: relative; z-index: 2; height: 420vh; background: var(--bg); }
@@ -279,7 +282,7 @@ img, video, canvas, svg { display: block; }
 .process__body { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 4vw; }
 .process__digits { height: 26vw; overflow: hidden; }
 .process__digits-track { will-change: transform; }
-.process__digits span { display: block; height: 26vw; font-family: var(--futur); font-size: 25vw; font-weight: 400; line-height: 26vw; letter-spacing: .01em; color: transparent; -webkit-text-stroke: 1.5px #f2f2ee; }
+.process__digits span { display: block; height: 26vw; font-family: var(--futur); font-size: 25vw; font-weight: 400; line-height: 26vw; letter-spacing: .01em; color: transparent; -webkit-text-stroke: 1.5px var(--blue); }
 .process__steps { position: relative; height: 22vw; }
 .step { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; }
 .step__title { font-family: var(--futur); font-size: var(--display); font-weight: 400; line-height: 1.02; letter-spacing: .01em; text-transform: uppercase; }
@@ -294,18 +297,57 @@ img, video, canvas, svg { display: block; }
 .reviews__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 4vw; }
 .reviews__score { display: flex; align-items: baseline; font-weight: 500; letter-spacing: -.06em; line-height: .8; }
 .reviews__num { font-family: var(--futur); font-size: 14vw; font-weight: 400; font-variant-numeric: tabular-nums; }
-.reviews__of { font-family: var(--futur); font-size: 3.2vw; font-weight: 400; color: #8a8a83; margin-left: .6vw; }
+.reviews__of { font-family: var(--futur); font-size: 3.2vw; font-weight: 400; color: var(--blue); margin-left: .6vw; }
 .reviews__meta { width: 28vw; min-width: 260px; padding-bottom: 1.4vw; }
 .reviews__meta .label { color: #55554f; margin-bottom: 1vw; }
 .reviews__lead { font-size: max(16px, 1.5vw); line-height: 1.3; margin-bottom: 1.4vw; }
 .reviews .outline-btn--light { border-color: var(--ink); color: var(--ink); }
 .reviews .outline-btn--light:hover { background: var(--ink); color: var(--paper); }
-.reviews__track { display: flex; gap: 1.57vw; padding-inline: var(--pad); width: max-content; will-change: transform; }
-.review { flex: 0 0 26vw; min-width: 280px; min-height: 17vw; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; padding: 2vw; background: var(--bg); color: #f2f2ee; }
-.review blockquote { font-size: max(18px, 1.45vw); font-weight: 400; line-height: 1.3; letter-spacing: -.015em; }
-.review blockquote::before { content: '\201C'; display: block; font-size: 3em; line-height: .6; color: var(--red); margin-bottom: .1em; }
-.review figcaption { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #9a9a92; }
-.review figcaption b { color: #f2f2ee; font-weight: 400; margin-right: 6px; }
+.reviews__track { display: flex; align-items: flex-end; gap: 1.4vw; padding: 3vw var(--pad) 0; width: max-content; will-change: transform; }
+.review { flex: 0 0 21vw; min-width: 250px; will-change: transform; }
+
+/* Carte d'avis : grise au repos ; active (survol ou passage au centre), elle se soulève
+   et un dégradé bleu monte du bas comme un liquide, puis redescend en la quittant. */
+.review__card {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 24px;
+  height: 29vw; min-height: 340px; padding: 1.5vw; border-radius: 14px;
+  background: #ebebe7; color: var(--ink);
+  transition: transform .45s cubic-bezier(.4, 0, .2, 1), box-shadow .45s;
+}
+.review__glow {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  transform: translateY(100%); opacity: 0;
+  -webkit-mask-image: linear-gradient(to top, #000 38%, transparent 88%); mask-image: linear-gradient(to top, #000 38%, transparent 88%);
+  transition: transform .45s cubic-bezier(.4, 0, .2, 1), opacity .35s;
+}
+.review__glow::before {
+  content: ''; position: absolute; inset: -30% -40% -20%;
+  background:
+    radial-gradient(38% 30% at 72% 78%, var(--blue) 0%, rgba(46,108,255,0) 100%),
+    radial-gradient(34% 26% at 30% 88%, var(--cyan) 0%, rgba(25,195,255,0) 100%),
+    radial-gradient(60% 40% at 50% 100%, var(--blue-deep) 0%, rgba(18,56,214,0) 100%);
+  animation: glow-drift 5.5s ease-in-out infinite alternate;
+}
+@keyframes glow-drift {
+  0%   { transform: translate3d(-6%, 3%, 0) rotate(-6deg) scale(1); }
+  50%  { transform: translate3d(5%, -4%, 0) rotate(4deg) scale(1.08); }
+  100% { transform: translate3d(-2%, 2%, 0) rotate(10deg) scale(1.02); }
+}
+.review blockquote { font-size: max(18px, 1.45vw); font-weight: 500; line-height: 1.25; letter-spacing: -.015em; }
+.review blockquote::before { content: '\201C'; display: block; font-family: var(--futur); font-size: 2.6em; line-height: .7; color: var(--blue); margin-bottom: .15em; transition: color .45s; }
+.review figcaption { display: flex; align-items: center; gap: 10px; }
+.review__avatar { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--ink); color: #fff; font-family: var(--mono); font-size: 13px; transition: background .45s, color .45s; }
+.review__who { display: flex; flex-direction: column; line-height: 1.25; }
+.review__who b { font-size: 14px; font-weight: 600; transition: color .45s; }
+.review__who small { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: #6d6d66; transition: color .45s; }
+
+/* État actif : montée plus lente et souple que la redescente (comme la référence) */
+.review.is-active .review__card { transform: translateY(-2.2vw); box-shadow: 0 34px 60px -34px rgba(18,56,214,.6); transition: transform .7s cubic-bezier(.16, 1, .3, 1), box-shadow .7s; }
+.review.is-active .review__glow { transform: translateY(0); opacity: 1; transition: transform 1s cubic-bezier(.16, 1, .3, 1), opacity .4s; }
+.review.is-active blockquote::before { color: var(--ink); }
+.review.is-active .review__avatar { background: #fff; color: var(--blue-deep); }
+.review.is-active .review__who b, .review.is-active .review__who small { color: #fff; }
 .reviews__note { font-size: 12px; color: #6d6d66; }
 
 @media (max-width: 900px) {
@@ -354,7 +396,10 @@ img, video, canvas, svg { display: block; }
   .reviews__num { font-size: 27vw; }
   .reviews__of { font-size: 7vw; }
   .reviews__meta { width: auto; }
-  .review { flex-basis: 78vw; min-height: 220px; padding: 20px; }
+  .review { flex-basis: 74vw; }
+  .review__card { height: 96vw; max-height: 420px; padding: 20px; }
+  .reviews__track { gap: 14px; padding-top: 34px; }
+  .review.is-active .review__card { transform: translateY(-20px); }
   .location__text { max-width: none; }
   .location__map { top: 0; bottom: auto; height: 80vw; }
   .quote__box { flex-direction: column; align-items: flex-start; gap: 28px; justify-content: flex-end; min-height: 70vw; padding: 20px; }
@@ -380,3 +425,6 @@ img, video, canvas, svg { display: block; }
   letter-spacing: .035em;
 }
 .nav__word, .cap-card__title, .ind-card__title { -webkit-text-stroke: .03em currentColor; letter-spacing: .03em; }
+
+/* Titres bicolores : partie clé en bleu électrique */
+.accent { color: var(--blue); }
