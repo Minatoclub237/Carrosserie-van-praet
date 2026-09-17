@@ -224,15 +224,6 @@ const fresh = (el) => {
   return el
 }
 
-/* ---------- Fil de fer 3D : Three.js chargé à l'approche de la section ---------- */
-const arts = document.querySelectorAll('.ind-card__art')
-const wireIO = new IntersectionObserver(([entry]) => {
-  if (!entry.isIntersecting) return
-  wireIO.disconnect()
-  import('./wireframes.js').then((m) => m.initWireframes(arts, { reduced }))
-}, { rootMargin: '150% 0px' })
-wireIO.observe(document.querySelector('.industries'))
-
 /* ---------- Bandeau cinétique (installé une fois, recloné à chaque changement de langue) ---------- */
 const kineticRows = gsap.utils.toArray('.kinetic__row').map((row) => ({ row, track: row.querySelector('.kinetic__track'), dir: +row.dataset.dir, x: 0 }))
 const cloneKinetic = () => kineticRows.forEach(({ row, track }) => {
@@ -358,12 +349,6 @@ function buildMotion({ intro }) {
     gsap.fromTo(card, { y: [90, 170, 60, 140][i] }, {
       y: 0, ease: 'none',
       scrollTrigger: { trigger: '.capabilities__grid', start: 'top bottom', end: 'top 35%', scrub },
-    })
-  })
-  gsap.utils.toArray('.ind-card').forEach((card, i) => {
-    gsap.fromTo(card, { y: [120, 40, 160, 80][i] }, {
-      y: 0, ease: 'none',
-      scrollTrigger: { trigger: '.industries__grid', start: 'top bottom', end: 'top 30%', scrub },
     })
   })
   // Photo des panneaux : s'ouvre depuis la grille jusqu'au plein écran
