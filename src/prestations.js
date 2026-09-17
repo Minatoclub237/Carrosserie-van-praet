@@ -25,7 +25,6 @@ const N = CATALOGUE.length
 export const CATALOGUE_COUNT = CATALOGUE.reduce((n, c) => n + c.items.length, 0)
 export const slug = (t) => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 const pad = (n) => String(n).padStart(2, '0')
-const PH = { fr: 'Visuel à venir', en: 'Image coming soon', nl: 'Beeld volgt' }
 const UNIT = { fr: ['prestation', 'prestations'], en: ['service', 'services'], nl: ['dienst', 'diensten'] }
 const countLabel = (n) => `${n} ${tr(UNIT)[n > 1 ? 1 : 0]}`
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v))
@@ -42,10 +41,10 @@ export function initPrestations(section, { lenis, reduced }) {
   section.querySelector('[data-presta-domains]').textContent = N
 
   deck.innerHTML = CATALOGUE.map((c, i) => `
-    <article class="pcard" id="presta-${slug(c.title.fr)}" data-index="${i}">
+    <article class="pcard${c.items.length > 6 ? ' pcard--long' : ''}" id="presta-${slug(c.title.fr)}" data-index="${i}">
       <div class="pcard__media" aria-hidden="true">
+        <img class="pcard__img" src="/media/presta-${pad(i + 1)}.webp" width="1376" height="768" alt="" loading="lazy" decoding="async" />
         <span class="pcard__big">${pad(i + 1)}</span>
-        <span class="pcard__ph">${tr(PH)}</span>
         <i class="pcard__sheen"></i>
       </div>
       <div class="pcard__body">
@@ -130,7 +129,6 @@ export function initPrestations(section, { lenis, reduced }) {
   const setLang = () => {
     cards.forEach((card, i) => {
       const c = CATALOGUE[i]
-      card.querySelector('.pcard__ph').textContent = tr(PH)
       card.querySelector('.pcard__title').textContent = tr(c.title)
       card.querySelectorAll('.pcard__list li').forEach((li, k) => { li.textContent = tr(c.items[k]) })
       ticks[i].setAttribute('aria-label', tr(c.title))
