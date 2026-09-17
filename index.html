@@ -85,9 +85,32 @@
         </div>
         <a class="nav__quote" href="#devis" data-i18n="t004">Devis gratuit</a>
         <a class="nav__plus" href="tel:+32477777036" aria-label="Appeler le 0477 77 70 36">+</a>
+        <button type="button" class="nav__burger" aria-label="Menu" aria-expanded="false" aria-controls="mmenu"><span></span><span></span><span></span></button>
       </div>
     </div>
   </header>
+
+  <!-- MENU MOBILE : plein écran, se déroule depuis le haut -->
+  <div class="mmenu" id="mmenu" inert>
+    <nav class="mmenu__inner" aria-label="Menu">
+      <ul class="mmenu__list">
+        <li style="--i:0"><a href="#services"><span class="mmenu__num">01</span><span class="mmenu__label" data-i18n="t001">Services</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        <li style="--i:1"><a href="#prestations"><span class="mmenu__num">02</span><span class="mmenu__label" data-i18n="t169">Toutes les prestations</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        <li style="--i:2"><a href="#atelier"><span class="mmenu__num">03</span><span class="mmenu__label" data-i18n="t170">L’atelier</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        <li style="--i:3"><a href="#etapes"><span class="mmenu__num">04</span><span class="mmenu__label" data-i18n="t090">Comment ça se passe</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        <li style="--i:4"><a href="#avis"><span class="mmenu__num">05</span><span class="mmenu__label" data-i18n="t103">Avis clients</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        <li style="--i:5"><a href="#faq"><span class="mmenu__num">06</span><span class="mmenu__label">FAQ</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        <li style="--i:6"><a href="#devis"><span class="mmenu__num">07</span><span class="mmenu__label" data-i18n="t004">Devis gratuit</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+      </ul>
+      <div class="mmenu__foot" style="--i:7">
+        <p class="mmenu__hours"><span class="label" data-i18n="t163">Horaires</span><span><span data-i18n="t164">Lun – ven</span> 9:00 – 18:00 · <span data-i18n="t165">Samedi</span> 9:00 – 14:00</span></p>
+        <div class="mmenu__actions">
+          <a class="mmenu__call" href="tel:+32477777036"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z" fill="currentColor"/></svg><span>0477 77 70 36</span></a>
+          <a class="mmenu__route" href="https://maps.app.goo.gl/2hibFTy7Ff3hPFmB8" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span data-i18n="t158">Itinéraire <span>↗</span></span></a>
+        </div>
+      </div>
+    </nav>
+  </div>
 
   <main id="top">
     <!-- HERO : séquence au défilement (scène sticky) -->

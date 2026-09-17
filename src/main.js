@@ -91,6 +91,24 @@ const setNav = (y) => nav.classList.toggle('is-scrolled', y > 8)
 setNav(window.scrollY)
 lenis ? lenis.on('scroll', ({ scroll }) => setNav(scroll)) : window.addEventListener('scroll', () => setNav(window.scrollY), { passive: true })
 
+/* ---------- Menu mobile ---------- */
+{
+  const burger = document.querySelector('.nav__burger')
+  const menu = document.getElementById('mmenu')
+  const setMenu = (open) => {
+    document.documentElement.classList.toggle('menu-open', open)
+    burger.setAttribute('aria-expanded', String(open))
+    menu.inert = !open
+    open ? lenis?.stop() : lenis?.start()
+    document.body.style.overflow = open ? 'hidden' : ''
+  }
+  burger.addEventListener('click', () => setMenu(!document.documentElement.classList.contains('menu-open')))
+  // Un lien referme le menu ; le défilement fluide vers la section est ensuite géré par le gestionnaire commun
+  menu.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false) })
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && document.documentElement.classList.contains('menu-open')) { setMenu(false); burger.focus() } })
+  window.matchMedia('(min-width: 901px)').addEventListener('change', (m) => { if (m.matches) setMenu(false) })
+}
+
 /* ---------- Avant / après des cartes services ---------- */
 initBeforeAfter(document.querySelector('.capabilities'), { reduced })
 
